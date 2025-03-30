@@ -1,0 +1,2 @@
+1) I can not type in Original and Distcount Fields.
+2) Seamless Looping is not woking in home page.
