@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/rice-items")
+@CrossOrigin("*")
 public class RiceItemController {
 
     @Autowired
@@ -18,8 +19,18 @@ public class RiceItemController {
 
     @PostMapping
     public ResponseEntity<RiceItem> saveRiceItem(@RequestBody RiceItem riceItem) {
-        RiceItem savedRiceItem = riceItemService.saveRiceItem(riceItem);
-        return new ResponseEntity<>(savedRiceItem, HttpStatus.CREATED);
+        System.out.println("=== Starting saveRiceItem API call ===");
+        System.out.println("Received RiceItem: " + riceItem);
+
+        try {
+            RiceItem savedRiceItem = riceItemService.saveRiceItem(riceItem);
+            System.out.println("Successfully saved RiceItem with ID: " + savedRiceItem.getId());
+            return new ResponseEntity<>(savedRiceItem, HttpStatus.CREATED);
+        } catch (Exception e) {
+            System.out.println("Error saving RiceItem: " + e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './css/AddItem.css';
+import { addItem } from '../api/addItemApi';
 
 const AddItem = () => {
     const [formData, setFormData] = useState({
@@ -10,6 +11,9 @@ const AddItem = () => {
         originalPrice: '',
         discount: '',
         finalPrice: '',
+        inStock: true,
+        sold: '0',
+        nutrients: '',
     });
 
     const [errors, setErrors] = useState({});
@@ -30,103 +34,148 @@ const AddItem = () => {
     ];
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
+        const { name, value, type, checked } = e.target;
+
+        if (type === 'checkbox') {
+            setFormData(prev => ({ ...prev, [name]: checked }));
+            return;
+        }
+
+        // Validation patterns
+        const validation = {
+            sold: /^\d*$/,
+            quantity: /^\d*\.?\d*$/,
+            originalPrice: /^\d*\.?\d*$/,
+            discount: /^\d*\.?\d*$/,
+        };
+
+        if (validation[name] && !validation[name].test(value)) return;
+
+        setFormData(prev => {
+            const newData = { ...prev, [name]: value };
+
+            if (['originalPrice', 'discount'].includes(name)) {
+                const originalPrice = parseFloat(newData.originalPrice) || 0;
+                const discount = parseFloat(newData.discount) || 0;
+
+                if (!isNaN(originalPrice) && discount >= 0 && discount <= 100) {
+                    newData.finalPrice = (originalPrice * (100 - discount) / 100).toFixed(2);
+                } else {
+                    newData.finalPrice = '';
+                }
+            }
+
+            return newData;
         });
 
-        // Clear error for the changed field
-        setErrors({
-            ...errors,
+        setErrors(prev => ({
+            ...prev,
             [name]: '',
-        });
-
-        // Calculate final price if both originalPrice and discount are provided
-        if (name === 'originalPrice' || name === 'discount') {
-            calculateFinalPrice();
-        }
-    };
-
-    const calculateFinalPrice = () => {
-        const { originalPrice, discount } = formData;
-        if (originalPrice && discount && !isNaN(originalPrice) && !isNaN(discount)) {
-            const finalPrice = originalPrice * (100 - discount) / 100;
-            setFormData({
-                ...formData,
-                finalPrice: finalPrice.toFixed(2),
-            });
-        } else {
-            setFormData({
-                ...formData,
-                finalPrice: '',
-            });
-        }
+            ...(name === 'originalPrice' || name === 'discount' ? { finalPrice: '' } : {})
+        }));
     };
 
     const validateForm = () => {
         const newErrors = {};
+        const numericFields = ['quantity', 'originalPrice', 'discount', 'finalPrice', 'sold'];
 
-        if (!formData.name.trim()) {
-            newErrors.name = 'Name is required';
-        }
+        // Required fields
+        if (!formData.name.trim()) newErrors.name = 'Name is required';
+        if (!formData.type) newErrors.type = 'Type is required';
+        if (!formData.imageUrl.trim()) newErrors.imageUrl = 'Image URL is required';
 
-        if (!formData.type) {
-            newErrors.type = 'Type is required';
-        }
+        // Numeric validation
+        numericFields.forEach(field => {
+            const value = parseFloat(formData[field]);
+            if (formData[field] === '' || isNaN(value)) {
+                newErrors[field] = `${field.replace(/([A-Z])/g, ' $1')} must be a valid number`;
+            }
+        });
 
-        if (!formData.imageUrl.trim()) {
-            newErrors.imageUrl = 'Image URL is required';
-        }
+        // Specific validations
+        if (parseFloat(formData.discount) > 100) newErrors.discount = 'Discount cannot exceed 100%';
+        if (parseFloat(formData.quantity) <= 0) newErrors.quantity = 'Quantity must be positive';
+        if (parseInt(formData.sold, 10) < 0) newErrors.sold = 'Sold items cannot be negative';
 
-        if (!formData.quantity || isNaN(formData.quantity)) {
-            newErrors.quantity = 'Quantity must be a number';
-        }
-
-        if (!formData.originalPrice || isNaN(formData.originalPrice)) {
-            newErrors.originalPrice = 'Original Price must be a number';
-        }
-
-        if (!formData.discount || isNaN(formData.discount) || formData.discount < 0 || formData.discount > 100) {
-            newErrors.discount = 'Discount must be between 0 and 100';
-        }
-
-        if (!formData.finalPrice || isNaN(formData.finalPrice)) {
-            newErrors.finalPrice = 'Final Price must be a number';
-        }
+        // Nutrients validation
+        const nutrientList = formData.nutrients.split(',').map(n => n.trim()).filter(n => n);
+        if (nutrientList.length === 0) newErrors.nutrients = 'At least one nutrient required';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
+        setErrors({});
+        setSuccessMessage('');
 
-        setTimeout(() => {
-            if (validateForm()) {
-                setSuccessMessage('Item added successfully!');
-                setFormData({
-                    name: '',
-                    type: '',
-                    imageUrl: '',
-                    quantity: '',
-                    originalPrice: '',
-                    discount: '',
-                    finalPrice: '',
-                });
-            }
+        if (!validateForm()) {
             setIsSubmitting(false);
-        }, 1000);
+            return;
+        }
+
+        try {
+            const payload = {
+                name: formData.name.trim(),
+                type: formData.type,
+                imageUrl: formData.imageUrl.trim(),
+                quantity: parseFloat(formData.quantity),
+                originalPrice: parseFloat(formData.originalPrice),
+                discount: parseFloat(formData.discount),
+                finalPrice: parseFloat(formData.finalPrice),
+                inStock: formData.inStock,
+                sold: parseInt(formData.sold, 10),
+                nutrients: formData.nutrients.split(',').map(n => n.trim()).filter(n => n)
+            };
+
+            const response = await addItem(payload);
+
+            // Check if the response status is 201 (Created)
+            if (response.status !== 201) {
+                const errorData = await response.json();
+                console.log("Something went wrong", errorData);
+                throw new Error(errorData.message || 'Server rejected the request');
+            }
+
+            setSuccessMessage('Item added successfully!');
+            setFormData({
+                name: '',
+                type: '',
+                imageUrl: '',
+                quantity: '',
+                originalPrice: '',
+                discount: '',
+                finalPrice: '',
+                inStock: true,
+                sold: '0',
+                nutrients: ''
+            });
+
+        } catch (error) {
+            console.error('API Error:', error);
+            const errorMessage = error.name === 'TypeError'
+                ? 'Network error - check your connection'
+                : error.message;
+
+            setErrors(prev => ({
+                ...prev,
+                serverError: errorMessage
+            }));
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
         <div className="add-item-container">
             <h1>Add New Rice Item</h1>
-            {successMessage && (
-                <div className="success-message">{successMessage}</div>
-            )}
+            {successMessage && <div className="success-message">{successMessage}</div>}
+            {errors.serverError && <div className="error-message">{errors.serverError}</div>}
+
             <form onSubmit={handleSubmit} className="add-item-form">
+                {/* Name Field */}
                 <div className="form-group">
                     <label htmlFor="name">Name of the Rice:</label>
                     <input
@@ -142,28 +191,26 @@ const AddItem = () => {
                     {errors.name && <div className="error-message">{errors.name}</div>}
                 </div>
 
+                {/* Type Field */}
                 <div className="form-group">
                     <label htmlFor="type">Type of Rice:</label>
-                    <div className="custom-dropdown">
-                        <select
-                            id="type"
-                            name="type"
-                            value={formData.type}
-                            onChange={handleChange}
-                            className={errors.type ? 'input-error' : ''}
-                            disabled={isSubmitting}
-                        >
-                            <option value="" disabled hidden>Select Rice Type</option>
-                            {riceTypes.map((type) => (
-                                <option key={type} value={type}>
-                                    {type}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                    <select
+                        id="type"
+                        name="type"
+                        value={formData.type}
+                        onChange={handleChange}
+                        className={`custom-dropdown ${errors.type ? 'input-error' : ''}`}
+                        disabled={isSubmitting}
+                    >
+                        <option value="" disabled hidden>Select Rice Type</option>
+                        {riceTypes.map(type => (
+                            <option key={type} value={type}>{type}</option>
+                        ))}
+                    </select>
                     {errors.type && <div className="error-message">{errors.type}</div>}
                 </div>
 
+                {/* Image URL Field */}
                 <div className="form-group">
                     <label htmlFor="imageUrl">Image URL:</label>
                     <input
@@ -179,6 +226,7 @@ const AddItem = () => {
                     {errors.imageUrl && <div className="error-message">{errors.imageUrl}</div>}
                 </div>
 
+                {/* Quantity Field */}
                 <div className="form-group">
                     <label htmlFor="quantity">Quantity (kg):</label>
                     <input
@@ -194,46 +242,99 @@ const AddItem = () => {
                     {errors.quantity && <div className="error-message">{errors.quantity}</div>}
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="originalPrice">Original Price ($):</label>
-                    <input
-                        type="text"
-                        id="originalPrice"
-                        name="originalPrice"
-                        value={formData.originalPrice}
-                        onChange={handleChange}
-                        className={errors.originalPrice ? 'input-error' : ''}
-                        placeholder="Enter original price"
-                    />
-                    {errors.originalPrice && <div className="error-message">{errors.originalPrice}</div>}
+                {/* Price Fields */}
+                <div className="price-fields">
+                    <div className="form-group">
+                        <label htmlFor="originalPrice">Original Price ($):</label>
+                        <input
+                            type="text"
+                            id="originalPrice"
+                            name="originalPrice"
+                            value={formData.originalPrice}
+                            onChange={handleChange}
+                            className={errors.originalPrice ? 'input-error' : ''}
+                            placeholder="Enter original price"
+                            disabled={isSubmitting}
+                        />
+                        {errors.originalPrice && <div className="error-message">{errors.originalPrice}</div>}
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="discount">Discount (%):</label>
+                        <input
+                            type="text"
+                            id="discount"
+                            name="discount"
+                            value={formData.discount}
+                            onChange={handleChange}
+                            className={errors.discount ? 'input-error' : ''}
+                            placeholder="Enter discount percentage"
+                            disabled={isSubmitting}
+                        />
+                        {errors.discount && <div className="error-message">{errors.discount}</div>}
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="finalPrice">Final Price ($):</label>
+                        <input
+                            type="text"
+                            id="finalPrice"
+                            name="finalPrice"
+                            value={formData.finalPrice}
+                            disabled
+                            className={errors.finalPrice ? 'input-error' : ''}
+                            placeholder="Calculated automatically"
+                        />
+                        {errors.finalPrice && <div className="error-message">{errors.finalPrice}</div>}
+                    </div>
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="discount">Discount (%):</label>
-                    <input
-                        type="text"
-                        id="discount"
-                        name="discount"
-                        value={formData.discount}
-                        onChange={handleChange}
-                        className={errors.discount ? 'input-error' : ''}
-                        placeholder="Enter discount percentage"
-                    />
-                    {errors.discount && <div className="error-message">{errors.discount}</div>}
+                {/* Inventory Section */}
+                <div className="inventory-section">
+                    <div className="form-group">
+                        <label className="checkbox-label">
+                            <input
+                                type="checkbox"
+                                name="inStock"
+                                checked={formData.inStock}
+                                onChange={handleChange}
+                                disabled={isSubmitting}
+                            />
+                            <span className="checkmark"></span>
+                            In Stock
+                        </label>
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="sold">Items Sold:</label>
+                        <input
+                            type="text"
+                            id="sold"
+                            name="sold"
+                            value={formData.sold}
+                            onChange={handleChange}
+                            className={errors.sold ? 'input-error' : ''}
+                            placeholder="Enter number of sold items"
+                            disabled={isSubmitting}
+                        />
+                        {errors.sold && <div className="error-message">{errors.sold}</div>}
+                    </div>
                 </div>
 
+                {/* Nutrients Section */}
                 <div className="form-group">
-                    <label htmlFor="finalPrice">Final Price ($):</label>
+                    <label htmlFor="nutrients">Nutrients (comma-separated):</label>
                     <input
                         type="text"
-                        id="finalPrice"
-                        name="finalPrice"
-                        value={formData.finalPrice}
-                        disabled
-                        className={errors.finalPrice ? 'input-error' : ''}
-                        placeholder="Final price will be calculated automatically"
+                        id="nutrients"
+                        name="nutrients"
+                        value={formData.nutrients}
+                        onChange={handleChange}
+                        className={errors.nutrients ? 'input-error' : ''}
+                        placeholder="Vitamin B, Iron, Fiber"
+                        disabled={isSubmitting}
                     />
-                    {errors.finalPrice && <div className="error-message">{errors.finalPrice}</div>}
+                    {errors.nutrients && <div className="error-message">{errors.nutrients}</div>}
                 </div>
 
                 <button
@@ -241,7 +342,14 @@ const AddItem = () => {
                     className="submit-button"
                     disabled={isSubmitting}
                 >
-                    {isSubmitting ? 'Adding Item...' : 'Add Item'}
+                    {isSubmitting ? (
+                        <>
+                            <span className="spinner"></span>
+                            Adding Item...
+                        </>
+                    ) : (
+                        'Add Item'
+                    )}
                 </button>
             </form>
         </div>
