@@ -1,20 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './css/UserProfile.css';
+import {
+    fetchUser,
+    updateUser,
+    addUPI,
+    removeUPI,
+    addPaymentMethod,
+    removePaymentMethod,
+    deleteUser
+} from '../api/userApi';
 
 const UserProfile = () => {
     const [user, setUser] = useState({
-        name: 'John Doe',
-        phoneNumber: '+91 1234567890',
-        address: '123 Main Street, Anytown, India',
-        email: 'john.doe@example.com',
+        name: '',
+        phoneNumber: '',
+        address: '',
+        email: '',
+        savedUPI: [],
+        savedCards: []
     });
-
-    const [savedUPI, setSavedUPI] = useState(['UPI123456@ybl', 'UPI987654@ybl']);
-    const [savedCards, setSavedCards] = useState([
-        { number: '**** **** **** 1234', expiry: '12/25', cvv: '123' },
-        { number: '**** **** **** 5678', expiry: '06/24', cvv: '456' },
-    ]);
-
     const [isDeleting, setIsDeleting] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [showAddUPI, setShowAddUPI] = useState(false);
@@ -22,8 +26,113 @@ const UserProfile = () => {
     const [newUPI, setNewUPI] = useState('');
     const [newCard, setNewCard] = useState({ number: '', expiry: '', cvv: '' });
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    // Form validation
+    useEffect(() => {
+        const loadUserData = async () => {
+            try {
+                setLoading(true);
+                const userData = await fetchUser();
+                setUser({
+                    ...userData,
+                    savedUPI: userData.savedUPI || [],
+                    savedCards: userData.savedCards || []
+                });
+                setLoading(false);
+            } catch (err) {
+                setError('Failed to load user data');
+                setLoading(false);
+            }
+        };
+
+        loadUserData();
+    }, []);
+
+    const handleSaveChanges = async () => {
+        if (!validateForm()) return;
+
+        setIsSaving(true);
+        try {
+            const updatedUserData = await updateUser(user);
+            setUser(updatedUserData);
+            alert('Changes saved successfully!');
+        } catch (error) {
+            setError('Failed to save changes');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        if (!window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+            return;
+        }
+
+        setIsDeleting(true);
+        try {
+            await deleteUser();
+            alert('Account deleted successfully!');
+            // Handle post-deletion (e.g., redirect to login)
+        } catch (error) {
+            setError('Failed to delete account');
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
+    const handleDeleteUPI = async (upi) => {
+        if (window.confirm('Are you sure you want to delete this UPI?')) {
+            try {
+                const updatedUser = await removeUPI(upi);
+                setUser(updatedUser);
+            } catch (error) {
+                setError('Failed to delete UPI');
+            }
+        }
+    };
+
+    const handleDeleteCard = async (card) => {
+        if (window.confirm('Are you sure you want to delete this card?')) {
+            try {
+                const updatedUser = await removePaymentMethod(card);
+                setUser(updatedUser);
+            } catch (error) {
+                setError('Failed to delete card');
+            }
+        }
+    };
+
+    const handleAddUPI = async () => {
+        if (newUPI.trim()) {
+            try {
+                const updatedUser = await addUPI(newUPI);
+                setUser(updatedUser);
+                setNewUPI('');
+                setShowAddUPI(false);
+            } catch (error) {
+                setError('Failed to add UPI');
+            }
+        } else {
+            alert('Please enter a valid UPI ID.');
+        }
+    };
+
+    const handleAddCard = async () => {
+        const { number, expiry, cvv } = newCard;
+        if (number.trim() && expiry.trim() && cvv.trim()) {
+            try {
+                const updatedUser = await addPaymentMethod(newCard);
+                setUser(updatedUser);
+                setNewCard({ number: '', expiry: '', cvv: '' });
+                setShowAddCard(false);
+            } catch (error) {
+                setError('Failed to add payment method');
+            }
+        } else {
+            alert('Please fill all card details.');
+        }
+    };
+
     const validateForm = () => {
         const { name, phoneNumber, address, email } = user;
         if (!name.trim()) {
@@ -46,68 +155,8 @@ const UserProfile = () => {
         return true;
     };
 
-    // Save changes
-    const handleSaveChanges = () => {
-        if (!validateForm()) return;
-
-        setIsSaving(true);
-        // Simulate API call
-        setTimeout(() => {
-            setIsSaving(false);
-            alert('Changes saved successfully!');
-        }, 1000);
-    };
-
-    // Delete account
-    const handleDeleteAccount = () => {
-        if (!window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-            return;
-        }
-
-        setIsDeleting(true);
-        // Simulate API call
-        setTimeout(() => {
-            setIsDeleting(false);
-            alert('Account deleted successfully!');
-        }, 1000);
-    };
-
-    // Delete UPI
-    const handleDeleteUPI = (index) => {
-        if (window.confirm('Are you sure you want to delete this UPI?')) {
-            setSavedUPI(savedUPI.filter((_, i) => i !== index));
-        }
-    };
-
-    // Delete Card
-    const handleDeleteCard = (index) => {
-        if (window.confirm('Are you sure you want to delete this card?')) {
-            setSavedCards(savedCards.filter((_, i) => i !== index));
-        }
-    };
-
-    // Add new UPI
-    const handleAddUPI = () => {
-        if (newUPI.trim()) {
-            setSavedUPI([...savedUPI, newUPI]);
-            setNewUPI('');
-            setShowAddUPI(false);
-        } else {
-            alert('Please enter a valid UPI ID.');
-        }
-    };
-
-    // Add new Card
-    const handleAddCard = () => {
-        const { number, expiry, cvv } = newCard;
-        if (number.trim() && expiry.trim() && cvv.trim()) {
-            setSavedCards([...savedCards, { ...newCard }]);
-            setNewCard({ number: '', expiry: '', cvv: '' });
-            setShowAddCard(false);
-        } else {
-            alert('Please fill all card details.');
-        }
-    };
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div className="error-message">{error}</div>;
 
     return (
         <div className="user-profile">
@@ -180,13 +229,13 @@ const UserProfile = () => {
                         <div className="saved-payments">
                             <h3>Saved UPI</h3>
                             <ul>
-                                {savedUPI.map((upi, index) => (
-                                    <li key={index}>
+                                {user.savedUPI?.map((upi) => (
+                                    <li key={upi}>
                                         {upi}
                                         <button
                                             type="button"
                                             className="delete-item-button"
-                                            onClick={() => handleDeleteUPI(index)}
+                                            onClick={() => handleDeleteUPI(upi)}
                                             aria-label={`Delete UPI ${upi}`}
                                         >
                                             Delete
@@ -234,13 +283,13 @@ const UserProfile = () => {
                         <div className="saved-payments">
                             <h3>Saved Cards</h3>
                             <ul>
-                                {savedCards.map((card, index) => (
-                                    <li key={index}>
+                                {user.savedCards?.map((card) => (
+                                    <li key={`${card.number}-${card.expiry}`}>
                                         {card.number} | Expires: {card.expiry}
                                         <button
                                             type="button"
                                             className="delete-item-button"
-                                            onClick={() => handleDeleteCard(index)}
+                                            onClick={() => handleDeleteCard(card)}
                                             aria-label={`Delete Card ${card.number}`}
                                         >
                                             Delete
