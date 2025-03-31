@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './css/HomePage.css';
+import { Link } from 'react-router-dom';
 
 const HomePage = () => {
     const newArrivals = [
@@ -136,6 +137,28 @@ const HomePage = () => {
             <h1>Welcome to Rice and Glory</h1>
             <p>Your premier destination for premium rice varieties from around the world</p>
 
+            {/* New "Know About Rice" Section */}
+            <div className="know-about-rice">
+                <h2 className="section-title">Know About Rice</h2>
+                <p style={{ textAlign: 'center', margin: '1.5rem 0' }}>
+                    Discover the fascinating world of rice - its history, benefits, and cultivation process
+                </p>
+                <div className="about-rice-preview">
+                    <img
+                        src="https://images.unsplash.com/photo-1611143669185-af24681a3251?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+                        alt="Rice Field"
+                        loading="lazy"
+                    />
+                    <div className="preview-content">
+                        <h3>The Story of Rice</h3>
+                        <p>Rice is the most important staple food for over half of humanity. Discover why it's considered a superfood and its incredible journey from farm to table.</p>
+                        <Link to="/about-rice" className="learn-more-button">
+                            Learn More
+                        </Link>
+                    </div>
+                </div>
+            </div>
+
             <div className="new-arrivals">
                 <h2 className="section-title">New Arrivals</h2>
                 <div
@@ -205,6 +228,8 @@ const HomePage = () => {
                     </div>
                 </div>
             </div>
+
+
         </div>
     );
 };

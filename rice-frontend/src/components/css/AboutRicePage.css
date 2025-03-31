@@ -1,0 +1,245 @@
+/* AboutRicePage.css */
+.about-rice-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    background: linear-gradient(120deg, #f9f9f9 0%, #f0f0f0 100%);
+    min-height: 100vh;
+}
+
+/* Header Animation */
+.header-animation {
+    text-align: center;
+    margin-bottom: 4rem;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, wheat, #1B5E20);
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 12px 28px rgba(46, 125, 50, 0.2);
+}
+
+.header-animation h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.header-animation p {
+    font-size: 1.25rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Benefits Section */
+.benefits-section {
+    padding: 3rem 2rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    margin-bottom: 4rem;
+}
+
+.benefits-section h2 {
+    text-align: center;
+    color: #2E7D32;
+    margin-bottom: 3rem;
+    font-size: 2.25rem;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.benefit-card {
+    padding: 2rem;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.benefit-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #2E7D32;
+}
+
+.benefit-card h3 {
+    margin: 0 0 1rem;
+    color: #333;
+}
+
+.benefit-card p {
+    margin: 0;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Life Cycle Section */
+.life-cycle-section {
+    padding: 3rem 2rem;
+    background: linear-gradient(120deg, #f0f0f0 0%, #e8e8e8 100%);
+    border-radius: 12px;
+    margin-bottom: 4rem;
+}
+
+.life-cycle-section h2 {
+    text-align: center;
+    color: #2E7D32;
+    margin-bottom: 3rem;
+    font-size: 2.25rem;
+}
+
+.timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.timeline::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    background-color: #2E7D32;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -3px;
+    border-radius: 3px;
+}
+
+.timeline-item {
+    padding: 1rem 40px;
+    position: relative;
+    width: 50%;
+    box-sizing: border-box;
+}
+
+.timeline-item:nth-child(odd) {
+    left: 0;
+}
+
+.timeline-item:nth-child(even) {
+    left: 50%;
+}
+
+.timeline-icon {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    color: #2E7D32;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.timeline-item:nth-child(odd) .timeline-icon {
+    right: -25px;
+}
+
+.timeline-item:nth-child(even) .timeline-icon {
+    left: -25px;
+}
+
+.timeline-content {
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.timeline-content h3 {
+    margin: 0 0 1rem;
+    color: #2E7D32;
+}
+
+.timeline-content p {
+    margin: 0;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Premium Varieties Section */
+.premium-varieties {
+    padding: 3rem 2rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.premium-varieties h2 {
+    text-align: center;
+    color: #2E7D32;
+    margin-bottom: 3rem;
+    font-size: 2.25rem;
+}
+
+.varieties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.variety-card {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.variety-card:hover {
+    transform: translateY(-5px);
+}
+
+.variety-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.variety-card h3 {
+    margin: 1rem 1rem 0.5rem;
+    color: #2E7D32;
+}
+
+.variety-card p {
+    margin: 0 1rem 1rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .timeline::after {
+        left: 67px;
+    }
+
+    .timeline-item {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 25px;
+    }
+
+    .timeline-item:nth-child(even) {
+        left: 0;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-icon {
+        left: -25px;
+        right: auto;
+    }
+
+    .timeline-item:nth-child(even) .timeline-icon {
+        left: -25px;
+    }
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './css/CategoryPage.css';
 
 const CategoryPage = () => {
@@ -209,12 +210,16 @@ const CategoryPage = () => {
                                                 <span className="sold">Sold: {item.sold}</span>
                                             </div>
                                         </div>
-                                        <button
-                                            className={`buy-button ${!item.inStock ? 'disabled' : ''}`}
-                                            disabled={!item.inStock}
-                                        >
-                                            {item.inStock ? 'Buy Now' : 'Coming Soon'}
-                                        </button>
+                                        <div className="buy-button-container">
+                                            <Link to={`/item/${item.id}`}>
+                                                <button
+                                                    className={`buy-button ${!item.inStock ? 'disabled' : ''}`}
+                                                    disabled={!item.inStock}
+                                                >
+                                                    {item.inStock ? 'Buy Now' : 'Coming Soon'}
+                                                </button>
+                                            </Link>
+                                        </div>
                                     </div>
                                 ))
                             ) : (
