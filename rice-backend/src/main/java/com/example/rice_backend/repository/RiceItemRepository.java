@@ -9,6 +9,4 @@ import java.util.List;
 @Repository
 public interface RiceItemRepository extends MongoRepository<RiceItem, String> {
     List<RiceItem> findByType(String type);
-
-    List<RiceItem> findByInStock(boolean inStock);
 }

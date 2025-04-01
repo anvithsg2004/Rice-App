@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './css/CategoryPage.css';
+import { getAllCategories, getCategoryByName } from '../api/categoryApi';
 
 const CategoryPage = () => {
-    const [items, setItems] = useState([]);
+    const [riceItems, setRiceItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredItems, setFilteredItems] = useState([]);
     const [priceRange, setPriceRange] = useState([0, 1000]);
@@ -11,105 +12,98 @@ const CategoryPage = () => {
     const [sortBy, setSortBy] = useState('Recommended');
     const [isLoading, setIsLoading] = useState(true);
     const [maxPrice, setMaxPrice] = useState(1000);
+    const [error, setError] = useState(null);
+    const [typeNotFoundError, setTypeNotFoundError] = useState(false);
 
-    // Simulate API call
     useEffect(() => {
-        const fetchItems = () => {
-            const sampleData = [
-                {
-                    id: 1,
-                    name: 'Basmati Rice',
-                    description: 'Premium quality basmati rice from India',
-                    price: 599,
-                    image: 'https://images.unsplash.com/photo-1611143669185-af24681a3251?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-                    inStock: true,
-                    type: 'Basmati',
-                    sold: 150
-                },
-                {
-                    id: 2,
-                    name: 'Jasmine Rice',
-                    description: 'Aromatic jasmine rice from Thailand',
-                    price: 450,
-                    image: 'https://images.unsplash.com/photo-1598379007742-315e2c024786?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-                    inStock: true,
-                    type: 'Jasmine',
-                    sold: 89
-                },
-                {
-                    id: 3,
-                    name: 'Wild Rice',
-                    description: 'Nutritious wild rice blend',
-                    price: 899,
-                    image: 'https://images.unsplash.com/photo-1586201375761-83865001e8ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-                    inStock: false,
-                    type: 'Wild',
-                    sold: 42
-                },
-                {
-                    id: 4,
-                    name: 'Black Rice',
-                    description: 'Organic black rice with antioxidants',
-                    price: 699,
-                    image: 'https://images.unsplash.com/photo-1606751029598-4a642f1f9e6c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-                    inStock: true,
-                    type: 'Black',
-                    sold: 203
-                },
-                {
-                    id: 5,
-                    name: 'Carolina Gold Rice',
-                    description: 'Historic and flavorful rice variety',
-                    price: 1299,
-                    image: 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-                    inStock: true,
-                    type: 'Carolina Gold',
-                    sold: 27
-                },
-                {
-                    id: 6,
-                    name: 'Brown Rice',
-                    description: 'Whole grain brown rice with fiber',
-                    price: 399,
-                    image: 'https://images.unsplash.com/photo-1546548970-71785318a17b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-                    inStock: false,
-                    type: 'Brown',
-                    sold: 156
-                },
-            ];
+        const fetchRiceItems = async () => {
+            setIsLoading(true);
+            setError(null);
+            setTypeNotFoundError(false);
 
-            const prices = sampleData.map(item => item.price);
-            const calculatedMaxPrice = Math.ceil(Math.max(...prices) / 100) * 100;
+            try {
+                let data;
 
-            setItems(sampleData);
-            setMaxPrice(calculatedMaxPrice);
-            setPriceRange([0, calculatedMaxPrice]);
-            setIsLoading(false);
+                if (selectedType === 'All') {
+                    data = await getAllCategories();
+                } else {
+                    data = await getCategoryByName(selectedType);
+                }
+
+                // Ensure data is an array
+                if (!Array.isArray(data)) {
+                    data = [data];
+                }
+
+                // Flatten the rice items from categories
+                const items = data.flatMap(category => {
+                    return category.riceItems.map(item => ({
+                        id: item.id,
+                        name: item.name || 'Unnamed Rice', // Provide default values
+                        description: item.description || 'No description available',
+                        finalPrice: item.finalPrice || 0, // Ensure finalPrice is a number
+                        imageUrl: item.imageUrl || '/images/default-rice.jpg',
+                        inStock: item.quantity > 0, // Determine if in stock based on quantity
+                        type: category.name
+                    }));
+                });
+
+                if (items.length === 0) {
+                    if (selectedType !== 'All') {
+                        setTypeNotFoundError(true);
+                    } else {
+                        setError('No rice items found.');
+                    }
+                    setIsLoading(false);
+                    return;
+                }
+
+                const prices = items.map(item => item.finalPrice);
+                const calculatedMaxPrice = Math.ceil(Math.max(...prices) / 100) * 100;
+
+                setRiceItems(items);
+                setMaxPrice(calculatedMaxPrice);
+                setPriceRange([0, calculatedMaxPrice]);
+                setIsLoading(false);
+            } catch (err) {
+                // setError('Failed to fetch rice items. Please try again later.');
+                setIsLoading(false);
+                console.error('Error fetching rice items:', err);
+            }
         };
 
-        setTimeout(fetchItems, 500); // Simulate network delay
-    }, []);
+        fetchRiceItems();
+    }, [selectedType]);
 
-    // Filter and sort items
     useEffect(() => {
-        const filtered = items.filter(item => {
-            const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesPrice = item.price >= priceRange[0] && item.price <= priceRange[1];
-            const matchesType = selectedType === 'All' || item.type === selectedType;
-            return matchesSearch && matchesPrice && matchesType;
-        });
+        if (!isLoading) {
+            const filtered = riceItems.filter(item => {
+                const itemName = (item.name || '').toString().toLowerCase();
+                const itemType = (item.type || '').toString();
+                const searchText = searchTerm.toLowerCase();
+                const itemPrice = Number(item.finalPrice) || 0;
 
-        const sortedItems = [...filtered].sort((a, b) => {
-            switch (sortBy) {
-                case 'High to Low': return b.price - a.price;
-                case 'Low to High': return a.price - b.price;
-                case 'Highest Sold': return b.sold - a.sold;
-                default: return 0;
-            }
-        });
+                const matchesSearch = itemName.includes(searchText);
+                const matchesPrice = itemPrice >= priceRange[0] && itemPrice <= priceRange[1];
+                const matchesType = selectedType === 'All' || itemType === selectedType;
 
-        setFilteredItems(sortedItems);
-    }, [searchTerm, priceRange, selectedType, sortBy, items]);
+                return matchesSearch && matchesPrice && matchesType;
+            });
+
+            const sortedItems = [...filtered].sort((a, b) => {
+                const aPrice = Number(a.finalPrice) || 0;
+                const bPrice = Number(b.finalPrice) || 0;
+
+                switch (sortBy) {
+                    case 'High to Low': return bPrice - aPrice;
+                    case 'Low to High': return aPrice - bPrice;
+                    default: return 0;
+                }
+            });
+
+            setFilteredItems(sortedItems);
+        }
+    }, [searchTerm, priceRange, sortBy, riceItems, isLoading, selectedType]);
 
     return (
         <div className="category-page">
@@ -117,9 +111,10 @@ const CategoryPage = () => {
 
             {isLoading ? (
                 <div className="loading">Loading...</div>
+            ) : error ? (
+                <div className="error-message">{error}</div>
             ) : (
                 <div className="main-content">
-                    {/* Filters Sidebar */}
                     <div className="filters-sidebar">
                         <div className="filter-section">
                             <h3>Price Range</h3>
@@ -147,19 +142,21 @@ const CategoryPage = () => {
                                 onChange={(e) => setSelectedType(e.target.value)}
                             >
                                 <option value="All">All Types</option>
-                                <option value="Basmati">Basmati</option>
-                                <option value="Jasmine">Jasmine</option>
-                                <option value="Wild">Wild</option>
-                                <option value="Black">Black</option>
-                                <option value="Carolina Gold">Carolina Gold</option>
-                                <option value="Brown">Brown</option>
+                                <option value="Basmati Rice">Basmati Rice</option>
+                                <option value="Jasmine Rice">Jasmine Rice</option>
+                                <option value="Arborio Rice">Arborio Rice</option>
+                                <option value="Sushi Rice">Sushi Rice</option>
+                                <option value="Glutinous Rice (Sticky Rice)">Glutinous Rice (Sticky Rice)</option>
+                                <option value="Carolina Gold Rice">Carolina Gold Rice</option>
+                                <option value="Brown Rice">Brown Rice</option>
+                                <option value="Wild Rice">Wild Rice</option>
+                                <option value="Red Rice">Red Rice</option>
+                                <option value="Black Rice">Black Rice</option>
                             </select>
                         </div>
                     </div>
 
-                    {/* Main Content Area */}
                     <div className="content-area">
-                        {/* Search and Sort */}
                         <div className="search-sort-container">
                             <div className="search-bar">
                                 <input
@@ -179,14 +176,16 @@ const CategoryPage = () => {
                                     <option value="Recommended">Recommended</option>
                                     <option value="High to Low">Price: High to Low</option>
                                     <option value="Low to High">Price: Low to High</option>
-                                    <option value="Highest Sold">Highest Sold</option>
                                 </select>
                             </div>
                         </div>
 
-                        {/* Products Grid */}
                         <div className="items-grid">
-                            {filteredItems.length > 0 ? (
+                            {typeNotFoundError ? (
+                                <div className="no-results">
+                                    No products found for the selected type
+                                </div>
+                            ) : filteredItems.length > 0 ? (
                                 filteredItems.map(item => (
                                     <div
                                         key={item.id}
@@ -194,9 +193,12 @@ const CategoryPage = () => {
                                     >
                                         <div className="item-image">
                                             <img
-                                                src={item.image}
+                                                src={item.imageUrl}
                                                 alt={item.name}
                                                 loading="lazy"
+                                                onError={(e) => {
+                                                    e.target.src = '/images/default-rice.jpg';
+                                                }}
                                             />
                                             {!item.inStock && (
                                                 <div className="out-of-stock-label">Out of Stock</div>
@@ -204,10 +206,13 @@ const CategoryPage = () => {
                                         </div>
                                         <div className="item-details">
                                             <h3>{item.name}</h3>
-                                            <p>{item.description}</p>
+                                            <p className="item-description">{item.description}</p>
                                             <div className="item-meta">
-                                                <span className="price">₹{item.price}</span>
-                                                <span className="sold">Sold: {item.sold}</span>
+                                                <span className="price">
+                                                    ₹{item.finalPrice !== undefined && item.finalPrice !== null
+                                                        ? item.finalPrice.toFixed(2)
+                                                        : '0.00'}
+                                                </span>
                                             </div>
                                         </div>
                                         <div className="buy-button-container">

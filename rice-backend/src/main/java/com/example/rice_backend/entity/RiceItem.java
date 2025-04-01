@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Objects;
 
 @Document(collection = "rice_items")
 public class RiceItem {
@@ -12,12 +13,11 @@ public class RiceItem {
     private String name;
     private String type; // This will act as the category
     private String imageUrl;
-    private double quantity;
+    private double quantity; // In kg
     private double originalPrice;
     private double discount;
     private double finalPrice;
-    private boolean inStock;
-    private int sold;
+    private String description;
     private List<String> nutrients;
 
     // No-args constructor
@@ -25,9 +25,8 @@ public class RiceItem {
     }
 
     // All-args constructor
-    public RiceItem(String id, String name, String type, String imageUrl, double quantity,
-                    double originalPrice, double discount, double finalPrice, boolean inStock,
-                    int sold, List<String> nutrients) {
+    public RiceItem(String id, String name, String type, String imageUrl, double quantity, double originalPrice,
+                    double discount, double finalPrice, String description, List<String> nutrients) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -36,8 +35,7 @@ public class RiceItem {
         this.originalPrice = originalPrice;
         this.discount = discount;
         this.finalPrice = finalPrice;
-        this.inStock = inStock;
-        this.sold = sold;
+        this.description = description;
         this.nutrients = nutrients;
     }
 
@@ -106,20 +104,12 @@ public class RiceItem {
         this.finalPrice = finalPrice;
     }
 
-    public boolean isInStock() {
-        return inStock;
+    public String getDescription() {
+        return description;
     }
 
-    public void setInStock(boolean inStock) {
-        this.inStock = inStock;
-    }
-
-    public int getSold() {
-        return sold;
-    }
-
-    public void setSold(int sold) {
-        this.sold = sold;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<String> getNutrients() {
@@ -128,5 +118,18 @@ public class RiceItem {
 
     public void setNutrients(List<String> nutrients) {
         this.nutrients = nutrients;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RiceItem riceItem = (RiceItem) o;
+        return Objects.equals(id, riceItem.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

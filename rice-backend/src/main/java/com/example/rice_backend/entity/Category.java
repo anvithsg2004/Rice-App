@@ -3,6 +3,7 @@ package com.example.rice_backend.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "categories")
@@ -10,14 +11,15 @@ public class Category {
     @Id
     private String id;
     private String name; // This will be the type of rice
-    private List<String> riceItems; // List of rice item names or IDs in this category
+    private List<RiceItem> riceItems; // List of RiceItem objects
 
     // No-args constructor
     public Category() {
+        this.riceItems = new ArrayList<>();
     }
 
     // All-args constructor
-    public Category(String id, String name, List<String> riceItems) {
+    public Category(String id, String name, List<RiceItem> riceItems) {
         this.id = id;
         this.name = name;
         this.riceItems = riceItems;
@@ -40,11 +42,11 @@ public class Category {
         this.name = name;
     }
 
-    public List<String> getRiceItems() {
+    public List<RiceItem> getRiceItems() {
         return riceItems;
     }
 
-    public void setRiceItems(List<String> riceItems) {
+    public void setRiceItems(List<RiceItem> riceItems) {
         this.riceItems = riceItems;
     }
 }

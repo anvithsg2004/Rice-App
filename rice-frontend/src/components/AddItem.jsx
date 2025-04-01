@@ -11,8 +11,7 @@ const AddItem = () => {
         originalPrice: '',
         discount: '',
         finalPrice: '',
-        inStock: true,
-        sold: '0',
+        description: '',
         nutrients: '',
     });
 
@@ -43,10 +42,9 @@ const AddItem = () => {
 
         // Validation patterns
         const validation = {
-            sold: /^\d*$/,
             quantity: /^\d*\.?\d*$/,
             originalPrice: /^\d*\.?\d*$/,
-            discount: /^\d*\.?\d*$/,
+            discount: /^\d*\.?\d*$/
         };
 
         if (validation[name] && !validation[name].test(value)) return;
@@ -77,12 +75,13 @@ const AddItem = () => {
 
     const validateForm = () => {
         const newErrors = {};
-        const numericFields = ['quantity', 'originalPrice', 'discount', 'finalPrice', 'sold'];
+        const numericFields = ['quantity', 'originalPrice', 'discount', 'finalPrice'];
 
         // Required fields
         if (!formData.name.trim()) newErrors.name = 'Name is required';
         if (!formData.type) newErrors.type = 'Type is required';
         if (!formData.imageUrl.trim()) newErrors.imageUrl = 'Image URL is required';
+        if (!formData.description.trim()) newErrors.description = 'Description is required';
 
         // Numeric validation
         numericFields.forEach(field => {
@@ -94,8 +93,7 @@ const AddItem = () => {
 
         // Specific validations
         if (parseFloat(formData.discount) > 100) newErrors.discount = 'Discount cannot exceed 100%';
-        if (parseFloat(formData.quantity) <= 0) newErrors.quantity = 'Quantity must be positive';
-        if (parseInt(formData.sold, 10) < 0) newErrors.sold = 'Sold items cannot be negative';
+        if (parseFloat(formData.quantity) <= 0) newErrors.quantity = 'Quantity must be greater than zero';
 
         // Nutrients validation
         const nutrientList = formData.nutrients.split(',').map(n => n.trim()).filter(n => n);
@@ -125,14 +123,12 @@ const AddItem = () => {
                 originalPrice: parseFloat(formData.originalPrice),
                 discount: parseFloat(formData.discount),
                 finalPrice: parseFloat(formData.finalPrice),
-                inStock: formData.inStock,
-                sold: parseInt(formData.sold, 10),
+                description: formData.description.trim(),
                 nutrients: formData.nutrients.split(',').map(n => n.trim()).filter(n => n)
             };
 
             const response = await addItem(payload);
 
-            // Check if the response status is 201 (Created)
             if (response.status !== 201) {
                 const errorData = await response.json();
                 console.log("Something went wrong", errorData);
@@ -148,8 +144,7 @@ const AddItem = () => {
                 originalPrice: '',
                 discount: '',
                 finalPrice: '',
-                inStock: true,
-                sold: '0',
+                description: '',
                 nutrients: ''
             });
 
@@ -226,6 +221,22 @@ const AddItem = () => {
                     {errors.imageUrl && <div className="error-message">{errors.imageUrl}</div>}
                 </div>
 
+                {/* Description Field */}
+                <div className="form-group">
+                    <label htmlFor="description">Description:</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        className={errors.description ? 'input-error' : ''}
+                        placeholder="Enter description"
+                        disabled={isSubmitting}
+                        rows="4"
+                    />
+                    {errors.description && <div className="error-message">{errors.description}</div>}
+                </div>
+
                 {/* Quantity Field */}
                 <div className="form-group">
                     <label htmlFor="quantity">Quantity (kg):</label>
@@ -286,38 +297,6 @@ const AddItem = () => {
                             placeholder="Calculated automatically"
                         />
                         {errors.finalPrice && <div className="error-message">{errors.finalPrice}</div>}
-                    </div>
-                </div>
-
-                {/* Inventory Section */}
-                <div className="inventory-section">
-                    <div className="form-group">
-                        <label className="checkbox-label">
-                            <input
-                                type="checkbox"
-                                name="inStock"
-                                checked={formData.inStock}
-                                onChange={handleChange}
-                                disabled={isSubmitting}
-                            />
-                            <span className="checkmark"></span>
-                            In Stock
-                        </label>
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="sold">Items Sold:</label>
-                        <input
-                            type="text"
-                            id="sold"
-                            name="sold"
-                            value={formData.sold}
-                            onChange={handleChange}
-                            className={errors.sold ? 'input-error' : ''}
-                            placeholder="Enter number of sold items"
-                            disabled={isSubmitting}
-                        />
-                        {errors.sold && <div className="error-message">{errors.sold}</div>}
                     </div>
                 </div>
 

@@ -1,6 +1,10 @@
-1) I can not type in Original and Distcount Fields.
-2) Seamless Looping is not woking in home page.
+1) Seamless Looping is not woking in home page.
 
 
-Things to Add
-1) Add the types same as like Add Item page in the Category Page
+Things to Add in the backend
+1) In the RiceItem entity add another feild "Description" and quantity availabe and remove feild sold and updata all the controller and the service layer according to the Entity Class.
+2) In the Category entity,add a field RiceItem id (which is from the rice item entity) to recognize the particular rice items and If the quantity becomes zero then automatically removed from the datebase.
+3) If I add an item in the Rice Item then it should get added in the category also and if the rice item quntity becomes 0 then the rice item is also removed from the category DB also.
+
+Things to Add in the frontend
+1) In the CategoryPage get all information about the rice Item but display only Final Price after the discount, Name of the rice not the type and description.

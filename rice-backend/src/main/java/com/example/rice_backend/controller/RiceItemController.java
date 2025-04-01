@@ -45,9 +45,13 @@ public class RiceItemController {
         return new ResponseEntity<>(riceItems, HttpStatus.OK);
     }
 
-    @GetMapping("/in-stock/{inStock}")
-    public ResponseEntity<List<RiceItem>> getRiceItemsByInStock(@PathVariable boolean inStock) {
-        List<RiceItem> riceItems = riceItemService.getRiceItemsByInStock(inStock);
-        return new ResponseEntity<>(riceItems, HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<RiceItem> getRiceItemById(@PathVariable String id) {
+        RiceItem riceItem = riceItemService.getRiceItemById(id);
+        if (riceItem == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(riceItem, HttpStatus.OK);
     }
+
 }
