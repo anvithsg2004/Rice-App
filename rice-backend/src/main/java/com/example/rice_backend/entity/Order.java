@@ -2,6 +2,7 @@ package com.example.rice_backend.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,23 @@ import java.util.List;
 public class Order {
     @Id
     private String id;
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", date=" + date +
+                ", status='" + status + '\'' +
+                ", items=" + items +
+                ", total=" + total +
+                ", totalWeight=" + totalWeight +
+                ", paymentMethod='" + paymentMethod + '\'' +
+                ", deliveryAddress='" + deliveryAddress + '\'' +
+                '}';
+    }
+
+    @Field("userId") // Ensure proper MongoDB field mapping
     private String userId;
     private Date date;
     private String status;

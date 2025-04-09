@@ -15,6 +15,18 @@ const CategoryPage = () => {
     const [error, setError] = useState(null);
     const [typeNotFoundError, setTypeNotFoundError] = useState(false);
 
+    // Function to convert Google Drive view link to direct image URL
+    const getDirectImageUrl = (url) => {
+        if (url && url.includes('drive.google.com')) {
+            const match = url.match(/\/d\/([^\/]+)\/view/);
+            if (match && match[1]) {
+                const fileId = match[1];
+                return `https://drive.google.com/uc?id=${fileId}`;
+            }
+        }
+        return url;
+    };
+
     useEffect(() => {
         const fetchRiceItems = async () => {
             setIsLoading(true);
@@ -42,7 +54,7 @@ const CategoryPage = () => {
                         name: item.name || 'Unnamed Rice', // Provide default values
                         description: item.description || 'No description available',
                         finalPrice: item.finalPrice || 0, // Ensure finalPrice is a number
-                        imageUrl: item.imageUrl || '/images/default-rice.jpg',
+                        imageUrl: getDirectImageUrl(item.imageUrl) || '/images/default-rice.jpg',
                         inStock: item.quantity > 0, // Determine if in stock based on quantity
                         type: category.name
                     }));
@@ -196,6 +208,8 @@ const CategoryPage = () => {
                                                 src={item.imageUrl}
                                                 alt={item.name}
                                                 loading="lazy"
+                                                // Add referrerpolicy to handle potential referrer issues
+                                                referrerpolicy="no-referrer"
                                                 onError={(e) => {
                                                     e.target.src = '/images/default-rice.jpg';
                                                 }}

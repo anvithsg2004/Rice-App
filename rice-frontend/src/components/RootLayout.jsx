@@ -1,8 +1,8 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom'; // Import Outlet from react-router-dom
 import Header from './Header';
-import './css/Header.css';
-import './css/Header.css';
+// import './css/Header.css';
+// import './css/Header.css';
 
 const RootLayout = () => {
     return (

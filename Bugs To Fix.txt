@@ -2,9 +2,12 @@
 
 
 Things to Add in the backend
-1) In the RiceItem entity add another feild "Description" and quantity availabe and remove feild sold and updata all the controller and the service layer according to the Entity Class.
-2) In the Category entity,add a field RiceItem id (which is from the rice item entity) to recognize the particular rice items and If the quantity becomes zero then automatically removed from the datebase.
-3) If I add an item in the Rice Item then it should get added in the category also and if the rice item quntity becomes 0 then the rice item is also removed from the category DB also.
+1) Add the basic authentication 
+2) The user can access the Home Page, Category Page and ItemDetailPage.
+3) In the ItemDetailPage, if the user tries to add to the Cart the he should direct to the Login page.
+4) If the user want to access the the Cart Page then he should Login.
+5) If the user want to access the the order Page then he should login.
+6) At last the user can access the Home Page, Category Page and ItemDetailPage and they cannot acceess the Cart Page, Order Page and Userprofile Page with the Login.
 
 Things to Add in the frontend
-1) In the CategoryPage get all information about the rice Item but display only Final Price after the discount, Name of the rice not the type and description.
+1) 

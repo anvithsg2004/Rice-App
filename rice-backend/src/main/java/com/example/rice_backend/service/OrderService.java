@@ -32,11 +32,12 @@ public class OrderService {
     private void calculateTotals(Order order) {
         List<OrderItem> items = order.getItems();
         double total = items.stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .mapToDouble(item -> item.getPrice())
                 .sum();
         double totalWeight = items.stream()
-                .mapToDouble(item -> Double.parseDouble(item.getWeight().split(" ")[0]) * item.getQuantity())
+                .mapToDouble(OrderItem::getWeight) // Directly sum weights
                 .sum();
+
         order.setTotal(total);
         order.setTotalWeight(totalWeight);
     }

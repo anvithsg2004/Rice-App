@@ -4,6 +4,10 @@ import com.example.rice_backend.entity.PaymentMethod;
 import com.example.rice_backend.entity.User;
 import com.example.rice_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,8 +19,48 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public boolean checkPassword(User user, String rawPassword) {
+        return passwordEncoder.matches(rawPassword, user.getPassword());
+    }
+
+    public boolean authenticate(String username, String password) {
+        User user = userRepository.findByEmail(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        if (!passwordEncoder.matches(password, user.getPassword())) { // Use user.getPassword()
+            throw new BadCredentialsException("Invalid password");
+        }
+        return true;
+    }
+
+    public String findUserIdByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+        return user.getId();
+    }
+
     public User saveUser(User user) {
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            throw new RuntimeException("Email already registered");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setSavedUPI(new ArrayList<>());
+        user.setSavedCards(new ArrayList<>());
         return userRepository.save(user);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     public User updateUser(String userId, User updatedUser) {
@@ -36,10 +80,6 @@ public class UserService {
     public User getUserById(String userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
     }
 
     public User addUPI(String userId, String upi) {

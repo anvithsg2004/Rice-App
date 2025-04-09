@@ -3,7 +3,7 @@ package com.example.rice_backend.entity;
 public class OrderItem {
     private String itemId;
     private String name;
-    private String weight;
+    private double weight;
     private double price;
     private int quantity;
 
@@ -12,7 +12,7 @@ public class OrderItem {
     }
 
     // All-Arg Constructor
-    public OrderItem(String itemId, String name, String weight, double price, int quantity) {
+    public OrderItem(String itemId, String name, double weight, double price, int quantity) {
         this.itemId = itemId;
         this.name = name;
         this.weight = weight;
@@ -27,10 +27,6 @@ public class OrderItem {
 
     public String getName() {
         return name;
-    }
-
-    public String getWeight() {
-        return weight;
     }
 
     public double getPrice() {
@@ -50,7 +46,11 @@ public class OrderItem {
         this.name = name;
     }
 
-    public void setWeight(String weight) {
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 

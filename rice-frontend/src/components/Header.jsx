@@ -1,8 +1,14 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './css/Header.css';
 
 const Header = () => {
+    const navigate = useNavigate();
+
+    const handleUserIconClick = () => {
+        localStorage.getItem('authToken') ? navigate('/user') : navigate('/login');
+    };
+
     return (
         <header className="app-header">
             <div className="header-left">
@@ -16,45 +22,39 @@ const Header = () => {
                 <nav className="main-nav">
                     <ul>
                         <li>
-                            <NavLink activeClassName="active" exact to="/">
+                            <Link to="/" className={({ isActive }) => isActive ? 'active' : ''}>
                                 Home
-                            </NavLink>
+                            </Link>
                         </li>
                         <li>
-                            <NavLink activeClassName="active" to="/categories">
+                            <Link to="/categories" className={({ isActive }) => isActive ? 'active' : ''}>
                                 Categories
-                            </NavLink>
+                            </Link>
                         </li>
                         <li>
-                            <NavLink activeClassName="active" to="/cart">
+                            <Link to="/cart" className={({ isActive }) => isActive ? 'active' : ''}>
                                 Cart
-                            </NavLink>
+                            </Link>
                         </li>
                         <li>
-                            <NavLink activeClassName="active" to="/orders">
+                            <Link to="/orders" className={({ isActive }) => isActive ? 'active' : ''}>
                                 Orders
-                            </NavLink>
+                            </Link>
                         </li>
-                        <li>
-                            <NavLink activeClassName="active" to="/add-item">
+                        {/* <li>
+                            <Link to="/add-item" className={({ isActive }) => isActive ? 'active' : ''}>
                                 Add Item
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink activeClassName="active" to="/auth">
-                                Login/Logout
-                            </NavLink>
-                        </li>
+                            </Link>
+                        </li> */}
                     </ul>
                 </nav>
                 <div className="user-icon">
-                    <NavLink activeClassName="active" to="/user">
-                        <img
-                            src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
-                            alt="User Profile"
-                            className="profile-image"
-                        />
-                    </NavLink>
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                        alt="User Profile"
+                        className="profile-image"
+                        onClick={handleUserIconClick}
+                    />
                 </div>
             </div>
         </header>

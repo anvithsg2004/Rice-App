@@ -20,7 +20,7 @@
 body {
     font-family: 'Montserrat', sans-serif;
     color: var(--text-dark);
-    background-color: var(--gray-light);
+    background-color: white;
     margin: 0;
     /* Remove padding from body to prevent navbar from being pushed down */
     padding: 0;

@@ -8,24 +8,26 @@
     --text-dark: #333333;
     --text-light: #666666;
     --white: #FFFFFF;
-    --gray-light: #F5F5F5;
+    --gray-light: #F9F9F9;
     --gray-medium: #E0E0E0;
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --transition: all 0.3s ease;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
+    --transition-fast: all 0.2s ease;
+    --transition-md: all 0.3s ease;
+    --transition-slow: all 0.4s ease;
 }
 
 body {
     font-family: 'Montserrat', sans-serif;
     color: var(--text-dark);
-    background-color: var(--gray-light);
-    background-image: linear-gradient(120deg, var(--gray-light) 0%, #f9f9f9 100%);
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
+    background-color: white;
 }
 
 .home-page {
-    padding: 3rem 2rem;
+    padding: 4rem 2rem;
     text-align: center;
     max-width: 1200px;
     margin: 0 auto;
@@ -34,24 +36,26 @@ body {
 h1 {
     color: var(--primary-dark);
     margin-bottom: 1rem;
-    font-size: 2.5rem;
+    font-size: 2.75rem;
     font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
 p {
     color: var(--text-light);
     margin-bottom: 2.5rem;
     font-size: 1.25rem;
+    line-height: 1.6;
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
 }
 
 .section-title {
-    font-size: 1.875rem;
+    font-size: 2rem;
     font-weight: 700;
     color: var(--primary-dark);
-    margin: 2.5rem 0 1.5rem;
+    margin: 3rem 0 2rem;
     position: relative;
     display: inline-block;
 }
@@ -59,145 +63,28 @@ p {
 .section-title::after {
     content: '';
     position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
+    bottom: -12px;
+    left: 0;
+    width: 70px;
+    height: 4px;
     background: linear-gradient(90deg, var(--primary-color), var(--accent-gold));
-    border-radius: 3px;
+    border-radius: 2px;
 }
 
-/* New Arrivals Section */
-.new-arrivals {
-    margin-bottom: 4rem;
-}
-
-.new-arrivals-container {
-    overflow-x: hidden;
-    position: relative;
-    padding: 1rem 0;
-}
-
-.new-arrivals-slider {
-    display: flex;
-    transition: transform 0.5s ease;
-}
-
-.new-arrivals-item {
-    flex: 0 0 300px;
-    margin-right: 2rem;
-    background-color: var(--white);
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: var(--transition);
-    position: relative;
-}
-
-.new-arrivals-item:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
-}
-
-.new-arrivals-item img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-}
-
-.new-arrivals-item-content {
-    padding: 1.5rem;
-}
-
-.new-arrivals-item h3 {
-    margin: 0 0 0.5rem;
-    font-weight: 600;
-}
-
-.new-arrivals-item p {
-    margin: 0 0 1rem;
-    color: var(--text-light);
-    font-size: 1rem;
-}
-
-.new-arrivals-item .price {
-    font-weight: 700;
-    color: var(--primary-dark);
-    font-size: 1.25rem;
-}
-
-/* Highest Bought Section */
-.highest-bought {
-    margin-bottom: 4rem;
-}
-
-.highest-bought-container {
-    overflow-x: hidden;
-    position: relative;
-    padding: 1rem 0;
-}
-
-.highest-bought-slider {
-    display: flex;
-    transition: transform 0.5s ease;
-}
-
-.highest-bought-item {
-    flex: 0 0 300px;
-    margin-right: 2rem;
-    background-color: var(--white);
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: var(--transition);
-    position: relative;
-}
-
-.highest-bought-item:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
-}
-
-.highest-bought-item img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-}
-
-.highest-bought-item-content {
-    padding: 1.5rem;
-}
-
-.highest-bought-item h3 {
-    margin: 0 0 0.5rem;
-    font-weight: 600;
-}
-
-.highest-bought-item p {
-    margin: 0 0 1rem;
-    color: var(--text-light);
-    font-size: 1rem;
-}
-
-.highest-bought-item .price {
-    font-weight: 700;
-    color: var(--primary-dark);
-    font-size: 1.25rem;
-}
-
-/* Know About Rice Section */
+/* New "Know About Rice" Section */
 .know-about-rice {
-    margin: 4rem 0;
+    margin: 5rem 0;
+    text-align: center;
 }
 
 .about-rice-preview {
     display: flex;
     align-items: center;
     background-color: white;
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-md);
+    margin-top: 2rem;
 }
 
 .about-rice-preview img {
@@ -208,37 +95,226 @@ p {
 
 .preview-content {
     width: 50%;
-    padding: 2rem;
+    padding: 2.5rem;
 }
 
 .preview-content h3 {
-    margin: 0 0 1rem;
+    margin: 0 0 1.25rem;
     color: var(--primary-dark);
+    font-size: 1.75rem;
+    font-weight: 700;
 }
 
 .preview-content p {
     margin: 0 0 1.5rem;
     color: var(--text-light);
-    line-height: 1.6;
+    line-height: 1.7;
 }
 
 .learn-more-button {
-    padding: 0.75rem 1.5rem;
+    padding: 0.875rem 1.75rem;
     background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color var(--transition-md);
+    font-size: 1rem;
 }
 
 .learn-more-button:hover {
     background-color: var(--primary-dark);
 }
 
+/* New Arrivals Section */
+.new-arrivals {
+    margin: 5rem 0;
+}
+
+.new-arrivals-container {
+    overflow-x: hidden;
+    position: relative;
+    padding: 1.5rem 0;
+    border-radius: 16px;
+    background-color: var(--white);
+    box-shadow: var(--shadow-md);
+}
+
+.new-arrivals-slider {
+    display: flex;
+    transition: transform var(--transition-md);
+}
+
+.new-arrivals-item {
+    flex: 0 0 280px;
+    margin-right: 2rem;
+    background-color: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: var(--transition-md);
+    position: relative;
+    box-shadow: var(--shadow-sm);
+}
+
+.new-arrivals-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.new-arrivals-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform var(--transition-fast);
+}
+
+.new-arrivals-item:hover img {
+    transform: scale(1.05);
+}
+
+.new-arrivals-item-content {
+    padding: 1.25rem;
+    position: relative;
+}
+
+.new-arrivals-item h3 {
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+    font-size: 1.125rem;
+}
+
+.new-arrivals-item p {
+    margin: 0 0 1rem;
+    color: var(--text-light);
+    font-size: 0.9375rem;
+}
+
+.new-arrivals-item .price {
+    font-weight: 700;
+    color: var(--primary-dark);
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.buy-now-button {
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-md);
+    opacity: 0;
+    transform: translateY(5px);
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+
+.new-arrivals-item:hover .buy-now-button {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.buy-now-button:hover {
+    background-color: var(--primary-dark);
+}
+
+/* Highest Bought Section */
+.highest-bought {
+    margin: 5rem 0;
+}
+
+.highest-bought-container {
+    overflow-x: hidden;
+    position: relative;
+    padding: 1.5rem 0;
+    border-radius: 16px;
+    background-color: var(--white);
+    box-shadow: var(--shadow-md);
+}
+
+.highest-bought-slider {
+    display: flex;
+    transition: transform var(--transition-md);
+}
+
+.highest-bought-item {
+    flex: 0 0 280px;
+    margin-right: 2rem;
+    background-color: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: var(--transition-md);
+    position: relative;
+    box-shadow: var(--shadow-sm);
+}
+
+.highest-bought-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.highest-bought-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform var(--transition-fast);
+}
+
+.highest-bought-item:hover img {
+    transform: scale(1.05);
+}
+
+.highest-bought-item-content {
+    padding: 1.25rem;
+    position: relative;
+}
+
+.highest-bought-item h3 {
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+    font-size: 1.125rem;
+}
+
+.highest-bought-item p {
+    margin: 0 0 1rem;
+    color: var(--text-light);
+    font-size: 0.9375rem;
+}
+
+.highest-bought-item .price {
+    font-weight: 700;
+    color: var(--primary-dark);
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.highest-bought-item .buy-now-button {
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-md);
+    opacity: 0;
+    transform: translateY(5px);
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+
+.highest-bought-item:hover .buy-now-button {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .about-rice-preview {
         flex-direction: column;
     }
@@ -251,5 +327,43 @@ p {
     .preview-content {
         width: 100%;
         padding: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .home-page {
+        padding: 3rem 1.5rem;
+    }
+
+    h1 {
+        font-size: 2.25rem;
+    }
+
+    .new-arrivals-item,
+    .highest-bought-item {
+        flex: 0 0 240px;
+        margin-right: 1.5rem;
+    }
+
+    .new-arrivals-item img,
+    .highest-bought-item img {
+        height: 180px;
+    }
+}
+
+@media (max-width: 576px) {
+    h1 {
+        font-size: 1.875rem;
+    }
+
+    .new-arrivals-item,
+    .highest-bought-item {
+        flex: 0 0 220px;
+        margin-right: 1rem;
+    }
+
+    .new-arrivals-item img,
+    .highest-bought-item img {
+        height: 160px;
     }
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './css/HomePage.css';
 import { Link } from 'react-router-dom';
+import './css/HomePage.css';
 
 const HomePage = () => {
     const newArrivals = [
@@ -145,7 +145,7 @@ const HomePage = () => {
                 </p>
                 <div className="about-rice-preview">
                     <img
-                        src="https://images.unsplash.com/photo-1611143669185-af24681a3251?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+                        src="src\components\Images\HomePage\pexels-photo-2589457.jpeg"
                         alt="Rice Field"
                         loading="lazy"
                     />
@@ -177,6 +177,7 @@ const HomePage = () => {
                                     <h3>{item.name}</h3>
                                     <p>{item.description}</p>
                                     <div className="price">{item.price}</div>
+                                    <button className="buy-now-button">Buy Now</button>
                                 </div>
                             </div>
                         ))}
@@ -187,6 +188,7 @@ const HomePage = () => {
                                     <h3>{item.name}</h3>
                                     <p>{item.description}</p>
                                     <div className="price">{item.price}</div>
+                                    <button className="buy-now-button">Buy Now</button>
                                 </div>
                             </div>
                         ))}
@@ -212,6 +214,7 @@ const HomePage = () => {
                                     <h3>{item.name}</h3>
                                     <p>{item.description}</p>
                                     <div className="price">{item.price}</div>
+                                    <button className="buy-now-button">Buy Now</button>
                                 </div>
                             </div>
                         ))}
@@ -222,14 +225,13 @@ const HomePage = () => {
                                     <h3>{item.name}</h3>
                                     <p>{item.description}</p>
                                     <div className="price">{item.price}</div>
+                                    <button className="buy-now-button">Buy Now</button>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
-
-
         </div>
     );
 };

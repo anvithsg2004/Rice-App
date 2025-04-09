@@ -19,14 +19,18 @@ public class RiceItem {
     private double finalPrice;
     private String description;
     private List<String> nutrients;
+    private int maxQuantity = 10;  // Default max quantity
+    private int minQuantity = 1;   // Default min quantity
 
     // No-args constructor
     public RiceItem() {
     }
 
     // All-args constructor
-    public RiceItem(String id, String name, String type, String imageUrl, double quantity, double originalPrice,
-                    double discount, double finalPrice, String description, List<String> nutrients) {
+    public RiceItem(String id, String name, String type, String imageUrl, double quantity,
+                    double originalPrice, double discount, double finalPrice,
+                    String description, List<String> nutrients,
+                    int maxQuantity, int minQuantity) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -37,6 +41,24 @@ public class RiceItem {
         this.finalPrice = finalPrice;
         this.description = description;
         this.nutrients = nutrients;
+        this.maxQuantity = maxQuantity;
+        this.minQuantity = minQuantity;
+    }
+
+    public int getMaxQuantity() {
+        return maxQuantity;
+    }
+
+    public void setMaxQuantity(int maxQuantity) {
+        this.maxQuantity = maxQuantity;
+    }
+
+    public int getMinQuantity() {
+        return minQuantity;
+    }
+
+    public void setMinQuantity(int minQuantity) {
+        this.minQuantity = minQuantity;
     }
 
     // Getters and Setters

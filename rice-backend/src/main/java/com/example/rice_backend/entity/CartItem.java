@@ -9,12 +9,11 @@ public class CartItem {
     private int maxQuantity;
     private int minQuantity;
 
-    // No-Arg Constructor
-    public CartItem() {
-    }
+    // Constructors
+    public CartItem() {}
 
-    // All-Arg Constructor
-    public CartItem(String itemId, String name, String imageUrl, double price, int quantity, int maxQuantity, int minQuantity) {
+    public CartItem(String itemId, String name, String imageUrl, double price,
+                    int quantity, int maxQuantity, int minQuantity) {
         this.itemId = itemId;
         this.name = name;
         this.imageUrl = imageUrl;
@@ -25,60 +24,20 @@ public class CartItem {
     }
 
     // Getters
-    public String getItemId() {
-        return itemId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public int getMaxQuantity() {
-        return maxQuantity;
-    }
-
-    public int getMinQuantity() {
-        return minQuantity;
-    }
+    public String getItemId() { return itemId; }
+    public String getName() { return name; }
+    public String getImageUrl() { return imageUrl; }
+    public double getPrice() { return price; }
+    public int getQuantity() { return quantity; }
+    public int getMaxQuantity() { return maxQuantity; }
+    public int getMinQuantity() { return minQuantity; }
 
     // Setters
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setMaxQuantity(int maxQuantity) {
-        this.maxQuantity = maxQuantity;
-    }
-
-    public void setMinQuantity(int minQuantity) {
-        this.minQuantity = minQuantity;
-    }
+    public void setItemId(String itemId) { this.itemId = itemId; }
+    public void setName(String name) { this.name = name; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public void setPrice(double price) { this.price = price; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setMaxQuantity(int maxQuantity) { this.maxQuantity = maxQuantity; }
+    public void setMinQuantity(int minQuantity) { this.minQuantity = minQuantity; }
 }

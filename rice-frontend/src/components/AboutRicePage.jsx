@@ -59,7 +59,6 @@ const AboutRicePage = () => {
 
     return (
         <div className="about-rice-container" id="about-rice">
-            <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet"></link>
             {/* Animated Header */}
             <motion.div
                 ref={headerRef}

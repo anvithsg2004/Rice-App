@@ -1,4 +1,3 @@
-// router.js
 import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '../components/RootLayout';
 import HomePage from '../components/HomePage';
@@ -8,7 +7,9 @@ import UserProfile from '../components/UserProfile';
 import OrderPage from '../components/Order';
 import Cart from '../components/CartPage';
 import ItemDetailPage from '../components/ItemDetailPage';
-import AboutRicePage from '../components/AboutRicePage'; // New import
+import AboutRicePage from '../components/AboutRicePage';
+import Login from '../components/Login'; // New import
+import Register from '../components/Register'; // New import
 
 const router = createBrowserRouter([
     {
@@ -44,8 +45,16 @@ const router = createBrowserRouter([
                 element: <ItemDetailPage />,
             },
             {
-                path: 'about-rice', // New route for About Rice page
+                path: 'about-rice',
                 element: <AboutRicePage />,
+            },
+            {
+                path: 'login',
+                element: <Login />,
+            },
+            {
+                path: 'register',
+                element: <Register />,
             },
         ],
     },

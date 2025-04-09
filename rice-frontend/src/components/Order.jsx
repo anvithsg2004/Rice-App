@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './css/Order.css';
+import ProtectedRoute from '../Router/ProtectedRoute';
+import { apiCall } from '../api/api';
+import { useNavigate } from 'react-router-dom'; // Make sure this line exists
 
 const Order = () => {
+    const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -17,95 +21,37 @@ const Order = () => {
         const fetchOrders = async () => {
             setLoading(true);
             try {
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                console.log('Fetching orders...');
+                const response = await apiCall('get', '/orders/my-orders'); // Removed /api prefix
 
-                const mockOrders = [
-                    {
-                        id: 'ORD12345',
-                        date: '2023-10-05',
-                        status: 'delivered',
-                        items: [
-                            { id: 'PROD1', name: 'Basmati Rice', weight: '5kg', price: 399, quantity: 1 },
-                            { id: 'PROD2', name: 'Jasmine Rice', weight: '2kg', price: 299, quantity: 2 }
-                        ],
-                        total: 997,
-                        totalWeight: 9,
-                        paymentMethod: 'UPI',
-                        deliveryAddress: '123 Main Street, Anytown, India'
-                    },
-                    {
-                        id: 'ORD12346',
-                        date: '2023-09-28',
-                        status: 'processing',
-                        items: [
-                            { id: 'PROD3', name: 'Arborio Rice', weight: '1kg', price: 199, quantity: 3 }
-                        ],
-                        total: 597,
-                        totalWeight: 3,
-                        paymentMethod: 'Credit Card',
-                        deliveryAddress: '123 Main Street, Anytown, India'
-                    },
-                    {
-                        id: 'ORD12347',
-                        date: '2023-09-15',
-                        status: 'cancelled',
-                        items: [
-                            { id: 'PROD4', name: 'Sushi Rice', weight: '2kg', price: 249, quantity: 1 }
-                        ],
-                        total: 249,
-                        totalWeight: 2,
-                        paymentMethod: 'UPI',
-                        deliveryAddress: '123 Main Street, Anytown, India'
-                    },
-                    {
-                        id: 'ORD12348',
-                        date: '2023-08-30',
-                        status: 'delivered',
-                        items: [
-                            { id: 'PROD5', name: 'Wild Rice', weight: '1kg', price: 299, quantity: 2 }
-                        ],
-                        total: 598,
-                        totalWeight: 2,
-                        paymentMethod: 'Credit Card',
-                        deliveryAddress: '123 Main Street, Anytown, India'
-                    },
-                    {
-                        id: 'ORD12349',
-                        date: '2023-08-10',
-                        status: 'delivered',
-                        items: [
-                            { id: 'PROD6', name: 'Red Rice', weight: '3kg', price: 279, quantity: 1 },
-                            { id: 'PROD7', name: 'Black Rice', weight: '1kg', price: 399, quantity: 1 }
-                        ],
-                        total: 678,
-                        totalWeight: 4,
-                        paymentMethod: 'UPI',
-                        deliveryAddress: '123 Main Street, Anytown, India'
-                    },
-                    {
-                        id: 'ORD12350',
-                        date: '2023-07-25',
-                        status: 'delivered',
-                        items: [
-                            { id: 'PROD8', name: 'Brown Rice', weight: '5kg', price: 249, quantity: 1 }
-                        ],
-                        total: 249,
-                        totalWeight: 5,
-                        paymentMethod: 'Credit Card',
-                        deliveryAddress: '123 Main Street, Anytown, India'
-                    }
-                ];
+                console.log('Response:', response);
 
-                setOrders(mockOrders);
-                setLoading(false);
+                if (response?.status === 401) {
+                    navigate('/login');
+                    return;
+                }
+
+                // The response is the actual data (no .data property)
+                if (Array.isArray(response)) { // Check if response is array
+                    setOrders(response);
+                } else if (response) { // Handle single order object
+                    setOrders([response]); // Wrap in array
+                } else {
+                    setError('No orders found');
+                }
             } catch (err) {
-                setError('Failed to load orders. Please try again later.');
-                setLoading(false);
+                console.error('Error fetching orders:', err);
+                if (err.response?.status === 401) {
+                    navigate('/login');
+                } else {
+                    setError(err.response?.data?.message || 'Failed to load orders. Please try again later.');
+                }
             }
+            setLoading(false);
         };
 
         fetchOrders();
-    }, []);
+    }, [navigate]);
 
     useEffect(() => {
         setCurrentPage(1);
@@ -172,152 +118,165 @@ const Order = () => {
     ));
 
     return (
-        <div className="order-page">
-            <h1>My Rice Orders</h1>
+        <ProtectedRoute>
+            <div className="order-page">
+                <h1>My Rice Orders</h1>
 
-            {loading && <div className="loading">Loading orders...</div>}
-            {error && <div className="error-message">{error}</div>}
+                {loading && <div className="loading">Loading orders...</div>}
+                {error && <div className="error-message">{error}</div>}
 
-            {!loading && !error && (
-                <div className="orders-container">
-                    <div className="filters">
-                        <div className="filter-group">
-                            <label>Order Status:</label>
-                            <select
-                                value={filters.status}
-                                onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-                            >
-                                <option value="all">All Orders</option>
-                                <option value="delivered">Delivered</option>
-                                <option value="processing">Processing</option>
-                                <option value="cancelled">Cancelled</option>
-                                <option value="shipped">Shipped</option>
-                            </select>
+                {!loading && !error && (
+                    <div className="orders-container">
+                        <div className="filters">
+                            <div className="filter-group">
+                                <label>Order Status:</label>
+                                <select
+                                    value={filters.status}
+                                    onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+                                >
+                                    <option value="all">All Orders</option>
+                                    <option value="delivered">Delivered</option>
+                                    <option value="processing">Processing</option>
+                                    <option value="cancelled">Cancelled</option>
+                                    <option value="shipped">Shipped</option>
+                                </select>
+                            </div>
+                            <div className="filter-group">
+                                <label>Date Range:</label>
+                                <select
+                                    value={filters.dateRange}
+                                    onChange={(e) => setFilters({ ...filters, dateRange: e.target.value })}
+                                >
+                                    <option value="all">All Time</option>
+                                    <option value="week">This Week</option>
+                                    <option value="month">This Month</option>
+                                    <option value="year">This Year</option>
+                                </select>
+                            </div>
+                            <div className="filter-group">
+                                <label>Rice Type:</label>
+                                <select
+                                    value={filters.riceType}
+                                    onChange={(e) => setFilters({ ...filters, riceType: e.target.value })}
+                                >
+                                    <option value="all">All Rice Types</option>
+                                    <option value="basmati">Basmati</option>
+                                    <option value="jasmine">Jasmine</option>
+                                    <option value="arborio">Arborio</option>
+                                    <option value="sushi">Sushi</option>
+                                    <option value="wild">Wild</option>
+                                    <option value="red">Red</option>
+                                    <option value="black">Black</option>
+                                    <option value="brown">Brown</option>
+                                </select>
+                            </div>
                         </div>
-                        <div className="filter-group">
-                            <label>Date Range:</label>
-                            <select
-                                value={filters.dateRange}
-                                onChange={(e) => setFilters({ ...filters, dateRange: e.target.value })}
-                            >
-                                <option value="all">All Time</option>
-                                <option value="week">This Week</option>
-                                <option value="month">This Month</option>
-                                <option value="year">This Year</option>
-                            </select>
-                        </div>
-                        <div className="filter-group">
-                            <label>Rice Type:</label>
-                            <select
-                                value={filters.riceType}
-                                onChange={(e) => setFilters({ ...filters, riceType: e.target.value })}
-                            >
-                                <option value="all">All Rice Types</option>
-                                <option value="basmati">Basmati</option>
-                                <option value="jasmine">Jasmine</option>
-                                <option value="arborio">Arborio</option>
-                                <option value="sushi">Sushi</option>
-                                <option value="wild">Wild</option>
-                                <option value="red">Red</option>
-                                <option value="black">Black</option>
-                                <option value="brown">Brown</option>
-                            </select>
-                        </div>
+
+                        {filteredOrders.length === 0 ? (
+                            <div className="no-orders">No orders found matching your criteria.</div>
+                        ) : (
+                            <div className="orders-list">
+                                {currentOrders.map(order => (
+                                    <div key={order.id} className="order-card">
+                                        <div className="order-header">
+                                            <div>
+                                                <h3>Order #{order.id}</h3>
+                                                <p>Ordered on: {new Date(order.date).toLocaleDateString()}</p>
+                                            </div>
+                                            {getStatusBadge(order.status)}
+                                        </div>
+
+                                        <div className="order-tracking">
+                                            <h4>Order Tracking</h4>
+                                            <div className="tracking-steps">
+                                                <div className="tracking-step completed">
+                                                    <span className="step-icon">1</span>
+                                                    <span className="step-label">Ordered</span>
+                                                </div>
+                                                <div className={`tracking-step ${order.status === 'processing' ? 'processing' : (order.status === 'shipped' || order.status === 'delivered') ? 'completed' : ''}`}>
+                                                    <span className="step-icon">2</span>
+                                                    <span className="step-label">Processing</span>
+                                                </div>
+                                                <div className={`tracking-step ${order.status === 'shipped' ? 'processing' : order.status === 'delivered' ? 'completed' : ''}`}>
+                                                    <span className="step-icon">3</span>
+                                                    <span className="step-label">Shipped</span>
+                                                </div>
+                                                <div className={`tracking-step ${order.status === 'delivered' ? 'completed' : ''}`}>
+                                                    <span className="step-icon">4</span>
+                                                    <span className="step-label">Delivered</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="order-items">
+                                            <h4>Rice Items:</h4>
+                                            <ul>
+                                                {order.items.map(item => (
+                                                    <li key={item.id}>
+                                                        <span className="item-name">{item.name}</span>
+                                                        <span className="item-weight">{item.weight}kg</span>
+                                                        <span className="item-price">₹{item.price} × {item.quantity}</span>
+                                                        <span className="item-total">₹{item.price * item.quantity}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+
+                                        <div className="order-summary">
+                                            <div className="summary-row">
+                                                <span>Total Weight:</span>
+                                                <span>{order.items.reduce((sum, item) => sum + (item.weight * item.quantity), 0)} kg</span>
+                                            </div>
+
+                                            <div className="summary-row">
+                                                <span>Subtotal:</span>
+                                                <span>₹{order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)}</span>
+                                            </div>
+
+                                            <div className="summary-row">
+                                                <span>Payment Method:</span>
+                                                <span>{order.paymentMethod || 'UPI'}</span>
+                                            </div>
+
+                                            <div className="summary-row">
+                                                <span>Delivery Address:</span>
+                                                <span>
+                                                    {order.deliveryAddress?.street &&
+                                                        `${order.deliveryAddress.street}, 
+                ${order.deliveryAddress.city}, 
+                ${order.deliveryAddress.state} - 
+                ${order.deliveryAddress.pincode}`
+                                                    }
+                                                    {!order.deliveryAddress?.street && 'No delivery address provided'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {totalPages > 1 && (
+                            <div className="pagination">
+                                <ul>
+                                    <li className={currentPage === 1 ? 'disabled' : ''}>
+                                        <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+                                            Previous
+                                        </button>
+                                    </li>
+                                    {renderPageNumbers}
+                                    <li className={currentPage === totalPages ? 'disabled' : ''}>
+                                        <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>
+                                            Next
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        )}
                     </div>
-
-                    {filteredOrders.length === 0 ? (
-                        <div className="no-orders">No orders found matching your criteria.</div>
-                    ) : (
-                        <div className="orders-list">
-                            {currentOrders.map(order => (
-                                <div key={order.id} className="order-card">
-                                    <div className="order-header">
-                                        <div>
-                                            <h3>Order #{order.id}</h3>
-                                            <p>Ordered on: {new Date(order.date).toLocaleDateString()}</p>
-                                        </div>
-                                        {getStatusBadge(order.status)}
-                                    </div>
-
-                                    <div className="order-tracking">
-                                        <h4>Order Tracking</h4>
-                                        <div className="tracking-steps">
-                                            <div className="tracking-step completed">
-                                                <span className="step-icon">1</span>
-                                                <span className="step-label">Ordered</span>
-                                            </div>
-                                            <div className={`tracking-step ${order.status === 'processing' ? 'processing' : (order.status === 'shipped' || order.status === 'delivered') ? 'completed' : ''}`}>
-                                                <span className="step-icon">2</span>
-                                                <span className="step-label">Processing</span>
-                                            </div>
-                                            <div className={`tracking-step ${order.status === 'shipped' ? 'processing' : order.status === 'delivered' ? 'completed' : ''}`}>
-                                                <span className="step-icon">3</span>
-                                                <span className="step-label">Shipped</span>
-                                            </div>
-                                            <div className={`tracking-step ${order.status === 'delivered' ? 'completed' : ''}`}>
-                                                <span className="step-icon">4</span>
-                                                <span className="step-label">Delivered</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="order-items">
-                                        <h4>Rice Items:</h4>
-                                        <ul>
-                                            {order.items.map(item => (
-                                                <li key={item.id}>
-                                                    <span className="item-name">{item.name}</span>
-                                                    <span className="item-weight">{item.weight}</span>
-                                                    <span className="item-price">₹{item.price}</span>
-                                                    <span className="item-quantity">×{item.quantity}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-
-                                    <div className="order-summary">
-                                        <div className="summary-row">
-                                            <span>Total Weight:</span>
-                                            <span>{order.totalWeight} kg</span>
-                                        </div>
-                                        <div className="summary-row">
-                                            <span>Subtotal:</span>
-                                            <span>₹{order.total}</span>
-                                        </div>
-                                        <div className="summary-row">
-                                            <span>Payment Method:</span>
-                                            <span>{order.paymentMethod}</span>
-                                        </div>
-                                        <div className="summary-row">
-                                            <span>Delivery Address:</span>
-                                            <span>{order.deliveryAddress}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-
-                    {totalPages > 1 && (
-                        <div className="pagination">
-                            <ul>
-                                <li className={currentPage === 1 ? 'disabled' : ''}>
-                                    <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
-                                        Previous
-                                    </button>
-                                </li>
-                                {renderPageNumbers}
-                                <li className={currentPage === totalPages ? 'disabled' : ''}>
-                                    <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>
-                                        Next
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    )}
-                </div>
-            )}
-        </div>
+                )}
+            </div>
+        </ProtectedRoute>
     );
 };
 

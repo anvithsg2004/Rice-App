@@ -1,32 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #2E7D32;
+    --primary-light: #4CAF50;
+    --primary-dark: #1B5E20;
+    --accent-gold: #D4AF37;
+    --text-dark: #333333;
+    --text-light: #666666;
+    --white: #FFFFFF;
+    --gray-light: #F5F5F5;
+    --gray-medium: #E0E0E0;
+    --error-color: #CC0000;
+    --success-color: #2E7D32;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-dark);
+    background-color: var(--gray-light);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
 .user-profile {
     max-width: 800px;
     margin: 0 auto;
     padding: 2rem;
-    background-color: #f9f9f9;
+    background-color: var(--white);
     min-height: 100vh;
 }
 
 h1 {
     text-align: center;
     margin-bottom: 2rem;
-    color: #2E7D32;
+    color: var(--primary-dark);
+    font-size: 2.2rem;
+    position: relative;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-gold));
 }
 
 .profile-container {
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
     padding: 2rem;
 }
 
 .profile-section {
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
 }
 
 .profile-section h2 {
     margin-bottom: 1.5rem;
-    color: #2E7D32;
+    color: var(--primary-dark);
     font-weight: 600;
+    font-size: 1.25rem;
 }
 
 .form-group {
@@ -38,24 +79,25 @@ h1 {
 
 label {
     font-weight: 500;
-    color: #333;
+    color: var(--text-dark);
 }
 
 input,
 textarea {
     padding: 0.875rem;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    border: 1px solid var(--gray-medium);
+    border-radius: 8px;
     font-size: 1rem;
-    transition: border-color 0.3s;
+    transition: var(--transition);
 }
 
 input:hover,
 textarea:hover,
 input:focus,
 textarea:focus {
-    border-color: #2E7D32;
+    border-color: var(--primary-light);
     outline: none;
+    box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
 }
 
 textarea {
@@ -64,17 +106,17 @@ textarea {
 }
 
 .saved-payments {
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    padding: 1rem;
+    background-color: var(--gray-light);
+    border-radius: 12px;
+    padding: 1.5rem;
     margin-bottom: 1.5rem;
 }
 
 .saved-payments h3 {
     margin-top: 0;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     font-size: 1.1rem;
-    color: #333;
+    color: var(--text-dark);
 }
 
 .saved-payments ul {
@@ -84,8 +126,8 @@ textarea {
 }
 
 .saved-payments li {
-    padding: 0.75rem;
-    border-bottom: 1px solid #ddd;
+    padding: 1rem;
+    border-bottom: 1px solid var(--gray-medium);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -96,20 +138,21 @@ textarea {
 }
 
 .save-button {
-    padding: 1rem;
-    background-color: #2E7D32;
+    padding: 1rem 2rem;
+    background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: var(--transition);
     margin-top: 1rem;
 }
 
 .save-button:hover {
-    background-color: #235e20;
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
 }
 
 .save-button:disabled {
@@ -118,15 +161,15 @@ textarea {
 }
 
 .delete-button {
-    padding: 1rem;
+    padding: 1rem 2rem;
     background-color: #FF3860;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: var(--transition);
     margin-top: 1rem;
 }
 
@@ -139,16 +182,32 @@ textarea {
     cursor: not-allowed;
 }
 
-.error-message {
-    background-color: #ffebee;
-    color: #c62828;
-    padding: 1rem;
-    border-radius: 6px;
-    margin-bottom: 1.5rem;
-    border-left: 4px solid #c62828;
+.logout-button {
+    padding: 1rem 2rem;
+    background-color: #ccc;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-left: 1rem;
 }
 
-/* Add these styles to your existing CSS */
+.logout-button:hover {
+    background-color: #aaa;
+}
+
+.error-message {
+    background-color: #ffebee;
+    color: var(--error-color);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid var(--error-color);
+}
+
 .delete-item-button {
     background-color: #FF3860;
     color: white;
@@ -157,7 +216,7 @@ textarea {
     padding: 0.25rem 0.75rem;
     font-size: 0.875rem;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: var(--transition);
 }
 
 .delete-item-button:hover {
@@ -165,19 +224,19 @@ textarea {
 }
 
 .add-button {
-    background-color: #2E7D32;
+    background-color: var(--primary-color);
     color: white;
     border: none;
     border-radius: 4px;
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: var(--transition);
     margin-top: 0.75rem;
 }
 
 .add-button:hover {
-    background-color: #235e20;
+    background-color: var(--primary-dark);
 }
 
 .cancel-button {
@@ -189,7 +248,7 @@ textarea {
     font-size: 0.875rem;
     cursor: pointer;
     margin-left: 0.5rem;
-    transition: background-color 0.3s;
+    transition: var(--transition);
 }
 
 .cancel-button:hover {
@@ -220,5 +279,17 @@ textarea {
 
     .delete-item-button {
         margin-top: 0.5rem;
+    }
+
+    .delete-button,
+    .save-button {
+        width: 100%;
+        margin-left: 0;
+        margin-bottom: 1rem;
+    }
+
+    .logout-button {
+        width: 100%;
+        margin-left: 0;
     }
 }

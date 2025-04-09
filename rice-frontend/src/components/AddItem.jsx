@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './css/AddItem.css';
+// import './css/AddItem.css';
 import { addItem } from '../api/addItemApi';
 
 const AddItem = () => {
@@ -105,15 +105,6 @@ const AddItem = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
-        setErrors({});
-        setSuccessMessage('');
-
-        if (!validateForm()) {
-            setIsSubmitting(false);
-            return;
-        }
-
         try {
             const payload = {
                 name: formData.name.trim(),
@@ -148,7 +139,12 @@ const AddItem = () => {
                 nutrients: ''
             });
 
+            await addItem(payload);
+
         } catch (error) {
+            if (error.response?.status === 401) {
+                navigate('/login');
+            }
             console.error('API Error:', error);
             const errorMessage = error.name === 'TypeError'
                 ? 'Network error - check your connection'
