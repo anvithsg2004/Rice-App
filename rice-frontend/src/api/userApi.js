@@ -1,6 +1,7 @@
 import { apiCall } from './api';
 
 const userId = localStorage.getItem('userId');
+//'http://localhost:8080/api'
 
 export const fetchUser = async () => {
     const userEmail = JSON.parse(localStorage.getItem('user')).email;
@@ -12,7 +13,12 @@ export const updateUser = async (userData) => {
 };
 
 export const addUPI = async (upi) => {
-    return apiCall('post', `/${userId}/add-upi`, upi);
+    const token = localStorage.getItem('authToken');
+    return apiCall('post', `/${userId}/add-upi`, upi, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
 };
 
 export const removeUPI = async (upi) => {

@@ -4,7 +4,10 @@ import com.example.rice_backend.entity.LoginRequest;
 import com.example.rice_backend.entity.PaymentMethod;
 import com.example.rice_backend.entity.User;
 import com.example.rice_backend.extra.UPIRequest;
+import com.example.rice_backend.repository.UserRepository;
+import com.example.rice_backend.service.OTPService;
 import com.example.rice_backend.service.UserService;
+import com.example.rice_backend.utility.SecurityUtils;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +25,36 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private OTPService otpService;
+
+    @PostMapping("/start-registration")
+    public ResponseEntity<?> startRegistration(@RequestBody User user) {
+        try {
+            otpService.generateAndSendOTP(user);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verifyOTP(@RequestBody Map<String, String> request) {
+        try {
+            boolean isValid = otpService.verifyOTP(
+                    request.get("email"),
+                    request.get("otp")
+            );
+            return isValid ? ResponseEntity.ok().build()
+                    : ResponseEntity.badRequest().body(Map.of("message", "Invalid OTP"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
 
     // Get user by email (public for testing)
     @GetMapping("/email/{email}")
@@ -105,34 +138,65 @@ public class UserController {
     @PostMapping("/{userId}/add-upi")
     public ResponseEntity<User> addUPI(
             @PathVariable String userId,
-            @RequestBody String upi,
-            Principal principal // Ensure user matches
+            @RequestBody String upi
     ) {
-        if (!userId.equals(principal.getName())) {
+        String userEmail = SecurityUtils.getCurrentUserEmail();
+        String currentUserId = userService.findUserIdByEmail(userEmail);
+
+        if (!userId.equals(currentUserId)) {
             throw new AccessDeniedException("User ID mismatch");
         }
+
         User user = userService.addUPI(userId, upi);
         return ResponseEntity.ok(user);
     }
 
     @DeleteMapping("/{userId}/remove-upi")
-    public ResponseEntity<User> removeUPI(@PathVariable String userId, @RequestBody UPIRequest upiRequest) {
-        System.out.println("Came inside the Remove UPI Method");
+    public ResponseEntity<User> removeUPI(
+            @PathVariable String userId,
+            @RequestBody UPIRequest upiRequest
+    ) {
+        String userEmail = SecurityUtils.getCurrentUserEmail();
+        String currentUserId = userService.findUserIdByEmail(userEmail);
+
+        if (!userId.equals(currentUserId)) {
+            throw new AccessDeniedException("User ID mismatch");
+        }
+
         String upi = upiRequest.getUpi();
         User user = userService.removeUPI(userId, upi);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/{userId}/add-payment-method")
-    public ResponseEntity<User> addPaymentMethod(@PathVariable String userId, @RequestBody PaymentMethod paymentMethod) {
+    public ResponseEntity<User> addPaymentMethod(
+            @PathVariable String userId,
+            @RequestBody PaymentMethod paymentMethod
+    ) {
+        String userEmail = SecurityUtils.getCurrentUserEmail();
+        String currentUserId = userService.findUserIdByEmail(userEmail);
+
+        if (!userId.equals(currentUserId)) {
+            throw new AccessDeniedException("User ID mismatch");
+        }
+
         User user = userService.addPaymentMethod(userId, paymentMethod);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return ResponseEntity.ok(user);
     }
 
     @DeleteMapping("/{userId}/remove-payment-method")
-    public ResponseEntity<User> removePaymentMethod(@PathVariable String userId, @RequestBody PaymentMethod paymentMethod) {
-        System.out.println("Came inside the Remove Payment Method");
+    public ResponseEntity<User> removePaymentMethod(
+            @PathVariable String userId,
+            @RequestBody PaymentMethod paymentMethod
+    ) {
+        String userEmail = SecurityUtils.getCurrentUserEmail();
+        String currentUserId = userService.findUserIdByEmail(userEmail);
+
+        if (!userId.equals(currentUserId)) {
+            throw new AccessDeniedException("User ID mismatch");
+        }
+
         User user = userService.removePaymentMethod(userId, paymentMethod);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return ResponseEntity.ok(user);
     }
 }

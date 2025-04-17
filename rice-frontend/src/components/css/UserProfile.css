@@ -293,3 +293,58 @@ textarea {
         margin-left: 0;
     }
 }
+
+/* Toast Styles */
+.custom-toast {
+    font-family: 'Inter', sans-serif !important;
+    border-radius: 8px !important;
+    box-shadow: var(--shadow-lg) !important;
+    margin: 1rem !important;
+}
+
+.custom-confirm-toast {
+    padding: 1.5rem !important;
+    min-width: 320px !important;
+}
+
+.confirm-toast p {
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.confirm-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.confirm-buttons button {
+    padding: 0.5rem 1.5rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.confirm-buttons button:first-child {
+    background: var(--primary-dark);
+    color: white;
+}
+
+.confirm-buttons button:last-child {
+    background: #eeeeee;
+    color: var(--text-dark);
+}
+
+.custom-progress {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.Toastify__toast-icon {
+    margin-right: 1rem !important;
+}
+
+.Toastify__close-button {
+    color: inherit !important;
+    opacity: 0.8 !important;
+}

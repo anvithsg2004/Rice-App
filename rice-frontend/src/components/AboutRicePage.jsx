@@ -1,84 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import React from 'react';
 import './css/AboutRicePage.css';
+import { Link } from 'react-router-dom';
 
 const AboutRicePage = () => {
-    const [isHeaderVisible, setIsHeaderVisible] = useState(false);
-    const [isBenefitsVisible, setIsBenefitsVisible] = useState(false);
-    const [isLifeCycleVisible, setIsLifeCycleVisible] = useState(false);
-    const [isVarietiesVisible, setIsVarietiesVisible] = useState(false);
-
-    const headerRef = useRef();
-    const benefitsRef = useRef();
-    const lifeCycleRef = useRef();
-    const varietiesRef = useRef();
-
-    useEffect(() => {
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1,
-        };
-
-        const observers = [];
-
-        const headerObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => entry.isIntersecting && setIsHeaderVisible(true));
-        }, observerOptions);
-        if (headerRef.current) {
-            headerObserver.observe(headerRef.current);
-            observers.push(headerObserver);
-        }
-
-        const benefitsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => entry.isIntersecting && setIsBenefitsVisible(true));
-        }, observerOptions);
-        if (benefitsRef.current) {
-            benefitsObserver.observe(benefitsRef.current);
-            observers.push(benefitsObserver);
-        }
-
-        const lifeCycleObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => entry.isIntersecting && setIsLifeCycleVisible(true));
-        }, observerOptions);
-        if (lifeCycleRef.current) {
-            lifeCycleObserver.observe(lifeCycleRef.current);
-            observers.push(lifeCycleObserver);
-        }
-
-        const varietiesObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => entry.isIntersecting && setIsVarietiesVisible(true));
-        }, observerOptions);
-        if (varietiesRef.current) {
-            varietiesObserver.observe(varietiesRef.current);
-            observers.push(varietiesObserver);
-        }
-
-        return () => observers.forEach(observer => observer.disconnect());
-    }, []);
-
     return (
         <div className="about-rice-container" id="about-rice">
-            {/* Animated Header */}
-            <motion.div
-                ref={headerRef}
-                className="header-animation"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: isHeaderVisible ? 1 : 0, y: isHeaderVisible ? 0 : 50 }}
-                transition={{ duration: 1, delay: 0.2 }}
-            >
+            {/* Header */}
+            <div className="header-animation">
                 <h1>The World of Rice</h1>
                 <p>Discover the fascinating journey of rice from ancient civilizations to modern tables</p>
-            </motion.div>
+            </div>
 
             {/* Benefits Section */}
-            <motion.div
-                ref={benefitsRef}
-                className="benefits-section"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: isBenefitsVisible ? 1 : 0, y: isBenefitsVisible ? 0 : 50 }}
-                transition={{ duration: 1, delay: 0.4 }}
-            >
+            <div className="benefits-section">
                 <h2>Health Benefits of Rice</h2>
                 <div className="benefits-grid">
                     <div className="benefit-card">
@@ -97,16 +31,10 @@ const AboutRicePage = () => {
                         <p>Especially brown rice, contains antioxidants that help protect cells from damage.</p>
                     </div>
                 </div>
-            </motion.div>
+            </div>
 
             {/* Life Cycle Section */}
-            <motion.div
-                ref={lifeCycleRef}
-                className="life-cycle-section"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: isLifeCycleVisible ? 1 : 0, y: isLifeCycleVisible ? 0 : 50 }}
-                transition={{ duration: 1, delay: 0.6 }}
-            >
+            <div className="life-cycle-section">
                 <h2>The Life Cycle of Rice</h2>
                 <div className="timeline">
                     <div className="timeline-item">
@@ -145,47 +73,47 @@ const AboutRicePage = () => {
                         </div>
                     </div>
                 </div>
-            </motion.div>
+            </div>
 
             {/* Premium Rice Varieties */}
-            <motion.div
-                ref={varietiesRef}
-                className="premium-varieties"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: isVarietiesVisible ? 1 : 0, y: isVarietiesVisible ? 0 : 50 }}
-                transition={{ duration: 1, delay: 0.8 }}
-            >
+            <div className="premium-varieties">
                 <h2>Premium Rice Varieties</h2>
                 <div className="varieties-grid">
                     <div className="variety-card">
-                        <img
-                            src="https://images.unsplash.com/photo-1611143669185-af24681a3251?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                            alt="Basmati Rice"
-                            loading="lazy"
-                        />
-                        <h3>Basmati Rice</h3>
-                        <p>Long-grained aromatic rice from India, known for its delicate flavor and fragrance.</p>
+                        <Link to="/item/67f08d9b5cfea66e0ad55053">
+                            <img
+                                src={`/src/components/img/67f08d9b5cfea66e0ad55053.jpeg`}
+                                alt="Superfino Arborio Rice"
+                                loading="lazy"
+                            />
+                            <h3>Superfino Arborio Rice</h3>
+                            <p>Highest quality Arborio rice, rich in starch, best for creamy risottos.</p>
+                        </Link>
                     </div>
                     <div className="variety-card">
-                        <img
-                            src="https://images.unsplash.com/photo-1598379007742-315e2c024786?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                            alt="Jasmine Rice"
-                            loading="lazy"
-                        />
-                        <h3>Jasmine Rice</h3>
-                        <p>Aromatic rice from Thailand with a slightly sweet flavor and a distinctive fragrance.</p>
+                        <Link to="/item/67f08e125cfea66e0ad55065">
+                            <img
+                                src={`/src/components/img/67f08e125cfea66e0ad55065.jpeg`}
+                                alt="Cultivated Wild Rice"
+                                loading="lazy"
+                            />
+                            <h3>Cultivated Wild Rice</h3>
+                            <p>Commercially farmed variety of wild rice that has a milder taste and softer texture.</p>
+                        </Link>
                     </div>
                     <div className="variety-card">
-                        <img
-                            src="https://images.unsplash.com/photo-1606751029598-4a642f1f9e6c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                            alt="Black Rice"
-                            loading="lazy"
-                        />
-                        <h3>Black Rice</h3>
-                        <p>Nutrient-dense heirloom rice with deep purple color and high antioxidant content.</p>
+                        <Link to="/item/67f08e055cfea66e0ad55062">
+                            <img
+                                src={`/src/components/img/67f08e055cfea66e0ad55062.jpeg`}
+                                alt="Northern Wild Rice"
+                                loading="lazy"
+                            />
+                            <h3>Northern Wild Rice</h3>
+                            <p>Grown in Canada, this variety has a firm texture and a slightly smoky flavor.</p>
+                        </Link>
                     </div>
                 </div>
-            </motion.div>
+            </div>
         </div>
     );
 };

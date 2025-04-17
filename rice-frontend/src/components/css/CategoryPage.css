@@ -201,12 +201,17 @@ select:focus {
 }
 
 .item-image {
-    height: 200px;
-    position: relative;
+    aspect-ratio: 1 / 1;
+    /* Adjust based on your images */
+    width: 100%;
     overflow: hidden;
+    position: relative;
 }
 
 .item-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -329,7 +334,8 @@ select:focus {
     }
 
     .item-image {
-        height: 160px;
+        aspect-ratio: 1 / 1;
+        /* Consistent ratio */
     }
 
     .item-details {

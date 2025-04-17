@@ -6,90 +6,90 @@ const HomePage = () => {
     const newArrivals = [
         {
             id: 1,
-            name: 'Basmati Rice',
-            description: 'Premium quality basmati rice from India',
-            price: '₹12.99',
-            image: 'https://images.unsplash.com/photo-1611143669185-af24681a3251?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+            name: 'Traditional Basmati',
+            description: 'Aged long-grain rice with a highly aromatic fragrance.',
+            price: '₹170',
+            image: `/src/components/img/67f08d055cfea66e0ad55048.jpeg`,
         },
         {
             id: 2,
-            name: 'Jasmine Rice',
-            description: 'Aromatic jasmine rice from Thailand',
-            price: '₹10.99',
-            image: 'https://images.unsplash.com/photo-1598379007742-315e2c024786?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+            name: 'Vietnamese Jasmine Rice',
+            description: 'Similar to Thai Jasmine rice but slightly softer and less fragrant.',
+            price: '₹493',
+            image: `/src/components/img/67f08d915cfea66e0ad55052.jpeg`,
         },
         {
             id: 3,
-            name: 'Wild Rice',
-            description: 'Nutritious wild rice blend',
-            price: '₹14.99',
-            image: 'https://images.unsplash.com/photo-1586201375761-83865001e8ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+            name: 'Northern Wild Rice',
+            description: 'Grown in Canada, this variety has a firm texture and a slightly smoky flavor.',
+            price: '₹553',
+            image: `/src/components/img/67f08e055cfea66e0ad55062.jpeg`,
         },
         {
             id: 4,
-            name: 'Black Rice',
-            description: 'Organic black rice with antioxidants',
-            price: '₹15.99',
-            image: 'https://images.unsplash.com/photo-1606751029598-4a642f1f9e6c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+            name: 'Indonesian Black Rice',
+            description: 'Naturally sweet black rice variety used in Indonesian desserts.',
+            price: '₹475',
+            image: `/src/components/img/67f08e3f5cfea66e0ad5506c.jpeg`,
         },
         {
             id: 5,
-            name: 'Carolina Gold Rice',
-            description: 'Historic and flavorful rice variety',
-            price: '₹13.99',
-            image: 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+            name: 'Sugandha Basmati',
+            description: 'Long-grain variety with mild fragrance, primarily used in everyday meals.',
+            price: '₹132',
+            image: `/src/components/img/67f08d375cfea66e0ad5504e.jpeg`,
         },
         {
             id: 6,
-            name: 'Brown Rice',
-            description: 'Whole grain brown rice with fiber',
-            price: '₹9.99',
-            image: 'https://images.unsplash.com/photo-1546548970-71785318a17b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+            name: 'Long-Grain Brown Rice',
+            description: 'Firm, less sticky variety that retains the bran layer, making it more nutritious than white rice.',
+            price: '₹468',
+            image: `/src/components/img/67f08df25cfea66e0ad5505e.jpeg`,
         },
     ];
 
     const highestBought = [
         {
             id: 1,
-            name: 'Basmati Rice',
-            description: 'Premium quality basmati rice from India',
-            price: '₹12.99',
-            image: 'https://images.unsplash.com/photo-1611143669185-af24681a3251?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+            name: 'Sharbati Basmati',
+            description: 'More affordable variety with a mild aroma, often used as a substitute for premium Basmati.',
+            price: '₹126',
+            image: `/src/components/img/67f08d2f5cfea66e0ad5504d.jpeg`,
         },
         {
             id: 2,
-            name: 'Jasmine Rice',
-            description: 'Aromatic jasmine rice from Thailand',
-            price: '₹10.99',
-            image: 'https://images.unsplash.com/photo-1598379007742-315e2c024786?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+            name: 'Sugandha Basmati',
+            description: 'Long-grain variety with mild fragrance, primarily used in everyday meals.',
+            price: '₹132',
+            image: `/src/components/img/67f08d375cfea66e0ad5504e.jpeg`,
         },
         {
             id: 3,
-            name: 'Wild Rice',
-            description: 'Nutritious wild rice blend',
-            price: '₹14.99',
-            image: 'https://images.unsplash.com/photo-1586201375761-83865001e8ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+            name: 'Manoomin (Native American Wild Rice)',
+            description: 'Hand-harvested wild rice with a distinct nutty flavor, commonly used in Native American cuisine.',
+            price: '₹563',
+            image: `/src/components/img/67f08e0c5cfea66e0ad55064.jpeg`,
         },
         {
             id: 4,
-            name: 'Black Rice',
-            description: 'Organic black rice with antioxidants',
-            price: '₹15.99',
-            image: 'https://images.unsplash.com/photo-1606751029598-4a642f1f9e6c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+            name: 'Indonesian Black Rice',
+            description: 'Naturally sweet black rice variety used in Indonesian desserts.',
+            price: '₹475',
+            image: `/src/components/img/67f08e3f5cfea66e0ad5506c.jpeg`,
         },
         {
             id: 5,
-            name: 'Sushi Rice',
-            description: 'Short-grain rice perfect for sushi',
-            price: '₹11.99',
-            image: 'https://images.unsplash.com/photo-1599599810769-b24aef221a0e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+            name: 'Black Glutinous Rice',
+            description: 'Dark purple variety of sticky rice with a nutty flavor.',
+            price: '₹477',
+            image: `/src/components/img/67f08ea15cfea66e0ad55070.jpeg`,
         },
         {
             id: 6,
-            name: 'Arborio Rice',
-            description: 'Ideal for risotto and creamy dishes',
-            price: '₹13.49',
-            image: 'https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+            name: 'Thai Red Cargo Rice',
+            description: 'Dense, chewy rice used in Thai cuisine, known for its reddish-brown color.',
+            price: '₹493',
+            image: `/src/components/img/67f08e1e5cfea66e0ad55068.jpeg`,
         },
     ];
 
@@ -97,38 +97,50 @@ const HomePage = () => {
     const [highestBoughtScroll, setHighestBoughtScroll] = useState(0);
     const [isHovered, setIsHovered] = useState(false);
 
+    // Helper function to extract itemId from image path
+    const getItemIdFromImage = (imagePath) => {
+        const parts = imagePath.split('/');
+        const filename = parts[parts.length - 1];
+        return filename.split('.')[0];
+    };
+
     useEffect(() => {
         const newArrivalsContainer = document.querySelector('.new-arrivals-container');
         const highestBoughtContainer = document.querySelector('.highest-bought-container');
 
+        let newArrivalsAnimationId;
+        let highestBoughtAnimationId;
+
         const scrollNewArrivals = () => {
             if (newArrivalsContainer && !isHovered) {
-                const scrollAmount = newArrivalsScroll + 1;
+                const scrollAmount = newArrivalsScroll + 0.5;
                 if (scrollAmount >= newArrivalsContainer.scrollWidth / 2) {
                     setNewArrivalsScroll(0);
                 } else {
                     setNewArrivalsScroll(scrollAmount);
                 }
+                newArrivalsAnimationId = requestAnimationFrame(scrollNewArrivals);
             }
         };
 
         const scrollHighestBought = () => {
             if (highestBoughtContainer && !isHovered) {
-                const scrollAmount = highestBoughtScroll + 1;
+                const scrollAmount = highestBoughtScroll + 0.5;
                 if (scrollAmount >= highestBoughtContainer.scrollWidth / 2) {
                     setHighestBoughtScroll(0);
                 } else {
                     setHighestBoughtScroll(scrollAmount);
                 }
+                highestBoughtAnimationId = requestAnimationFrame(scrollHighestBought);
             }
         };
 
-        const newArrivalsInterval = setInterval(scrollNewArrivals, 50);
-        const highestBoughtInterval = setInterval(scrollHighestBought, 50);
+        newArrivalsAnimationId = requestAnimationFrame(scrollNewArrivals);
+        highestBoughtAnimationId = requestAnimationFrame(scrollHighestBought);
 
         return () => {
-            clearInterval(newArrivalsInterval);
-            clearInterval(highestBoughtInterval);
+            cancelAnimationFrame(newArrivalsAnimationId);
+            cancelAnimationFrame(highestBoughtAnimationId);
         };
     }, [newArrivalsScroll, highestBoughtScroll, isHovered]);
 
@@ -170,28 +182,38 @@ const HomePage = () => {
                         className="new-arrivals-slider"
                         style={{ transform: `translateX(-${newArrivalsScroll}px)` }}
                     >
-                        {newArrivals.map(item => (
-                            <div key={item.id} className="new-arrivals-item">
-                                <img src={item.image} alt={item.name} />
-                                <div className="new-arrivals-item-content">
-                                    <h3>{item.name}</h3>
-                                    <p>{item.description}</p>
-                                    <div className="price">{item.price}</div>
-                                    <button className="buy-now-button">Buy Now</button>
+                        {newArrivals.map(item => {
+                            const itemId = getItemIdFromImage(item.image);
+                            return (
+                                <div key={item.id} className="new-arrivals-item">
+                                    <img src={item.image} alt={item.name} />
+                                    <div className="new-arrivals-item-content">
+                                        <h3>{item.name}</h3>
+                                        <p>{item.description}</p>
+                                        <div className="price">{item.price}</div>
+                                        <Link to={`/item/${itemId}`}>
+                                            <button className="buy-now-button">Buy Now</button>
+                                        </Link>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                        {newArrivals.map(item => (
-                            <div key={`${item.id}-duplicate`} className="new-arrivals-item">
-                                <img src={item.image} alt={item.name} />
-                                <div className="new-arrivals-item-content">
-                                    <h3>{item.name}</h3>
-                                    <p>{item.description}</p>
-                                    <div className="price">{item.price}</div>
-                                    <button className="buy-now-button">Buy Now</button>
+                            );
+                        })}
+                        {newArrivals.map(item => {
+                            const itemId = getItemIdFromImage(item.image);
+                            return (
+                                <div key={`${item.id}-duplicate`} className="new-arrivals-item">
+                                    <img src={item.image} alt={item.name} />
+                                    <div className="new-arrivals-item-content">
+                                        <h3>{item.name}</h3>
+                                        <p>{item.description}</p>
+                                        <div className="price">{item.price}</div>
+                                        <Link to={`/item/${itemId}`}>
+                                            <button className="buy-now-button">Buy Now</button>
+                                        </Link>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </div>
@@ -207,28 +229,38 @@ const HomePage = () => {
                         className="highest-bought-slider"
                         style={{ transform: `translateX(-${highestBoughtScroll}px)` }}
                     >
-                        {highestBought.map(item => (
-                            <div key={item.id} className="highest-bought-item">
-                                <img src={item.image} alt={item.name} />
-                                <div className="highest-bought-item-content">
-                                    <h3>{item.name}</h3>
-                                    <p>{item.description}</p>
-                                    <div className="price">{item.price}</div>
-                                    <button className="buy-now-button">Buy Now</button>
+                        {highestBought.map(item => {
+                            const itemId = getItemIdFromImage(item.image);
+                            return (
+                                <div key={item.id} className="highest-bought-item">
+                                    <img src={item.image} alt={item.name} />
+                                    <div className="highest-bought-item-content">
+                                        <h3>{item.name}</h3>
+                                        <p>{item.description}</p>
+                                        <div className="price">{item.price}</div>
+                                        <Link to={`/item/${itemId}`}>
+                                            <button className="buy-now-button">Buy Now</button>
+                                        </Link>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                        {highestBought.map(item => (
-                            <div key={`${item.id}-duplicate`} className="highest-bought-item">
-                                <img src={item.image} alt={item.name} />
-                                <div className="highest-bought-item-content">
-                                    <h3>{item.name}</h3>
-                                    <p>{item.description}</p>
-                                    <div className="price">{item.price}</div>
-                                    <button className="buy-now-button">Buy Now</button>
+                            );
+                        })}
+                        {highestBought.map(item => {
+                            const itemId = getItemIdFromImage(item.image);
+                            return (
+                                <div key={`${item.id}-duplicate`} className="highest-bought-item">
+                                    <img src={item.image} alt={item.name} />
+                                    <div className="highest-bought-item-content">
+                                        <h3>{item.name}</h3>
+                                        <p>{item.description}</p>
+                                        <div className="price">{item.price}</div>
+                                        <Link to={`/item/${itemId}`}>
+                                            <button className="buy-now-button">Buy Now</button>
+                                        </Link>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </div>

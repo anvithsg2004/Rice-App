@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './css/Cart.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import ProtectedRoute from '../Router/ProtectedRoute';
 import { apiCall } from '../api/api';
 import Razorpay from 'razorpay';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Cart = () => {
     const [cart, setCart] = useState(null);
@@ -38,7 +40,13 @@ const Cart = () => {
 
             // Validate locally first
             if (newQuantity < currentItem.minQuantity || newQuantity > currentItem.maxQuantity) {
-                alert(`Quantity must be between ${currentItem.minQuantity} and ${currentItem.maxQuantity}`);
+                toast.error(`Quantity must be between ${currentItem.minQuantity} and ${currentItem.maxQuantity}`, {
+                    style: {
+                        background: '#fff0f0',
+                        color: 'var(--text-dark)',
+                        border: '1px solid #ff4444',
+                    }
+                });
                 return;
             }
 
@@ -50,23 +58,54 @@ const Cart = () => {
             setCart(updatedCart);
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Failed to update quantity. Please try again.';
-            alert(errorMessage);
+            toast.error(errorMessage, {
+                style: {
+                    background: '#fff0f0',
+                    color: 'var(--text-dark)',
+                    border: '1px solid #ff4444',
+                }
+            });
         }
     };
 
     const handleRemoveItem = async (itemId) => {
-        if (window.confirm('Are you sure you want to remove this item from your cart?')) {
-            try {
-                await apiCall('delete', `/carts/remove/${itemId}`);
-
-                // Refresh cart data
-                const updatedCart = await apiCall('get', '/carts');
-                setCart(updatedCart);
-            } catch (error) {
-                const errorMessage = error.response?.data?.message || 'Failed to remove item. Please try again.';
-                alert(errorMessage);
+        toast.info(
+            <div className="confirm-toast">
+                <p>Are you sure you want to remove this item?</p>
+                <div className="confirm-buttons">
+                    <button onClick={async () => {
+                        toast.dismiss();
+                        try {
+                            await apiCall('delete', `/carts/remove/${itemId}`);
+                            const updatedCart = await apiCall('get', '/carts');
+                            setCart(updatedCart);
+                            toast.success('Item removed successfully', {
+                                style: {
+                                    background: 'var(--primary-dark)',
+                                    color: 'white',
+                                    border: '1px solid var(--accent-gold)',
+                                }
+                            });
+                        } catch (error) {
+                            const errorMessage = error.response?.data?.message || 'Failed to remove item. Please try again.';
+                            toast.error(errorMessage);
+                        }
+                    }}>
+                        Yes
+                    </button>
+                    <button onClick={() => toast.dismiss()}>
+                        No
+                    </button>
+                </div>
+            </div>,
+            {
+                autoClose: false,
+                closeOnClick: false,
+                draggable: false,
+                closeButton: false,
+                className: 'custom-confirm-toast'
             }
-        }
+        );
     };
 
     const handleApplyPromo = async () => {
@@ -79,7 +118,13 @@ const Cart = () => {
             setPromoCode('');
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Failed to apply promo code. Please try again.';
-            alert(errorMessage);
+            toast.error(errorMessage, {
+                style: {
+                    background: '#fff0f0',
+                    color: 'var(--text-dark)',
+                    border: '1px solid #ff4444',
+                }
+            });
         } finally {
             setIsApplyingPromo(false);
         }
@@ -174,7 +219,13 @@ const Cart = () => {
         } catch (error) {
             const errorMessage = error.response?.data?.message ||
                 'Failed to initiate payment. Please try again.';
-            alert(errorMessage);
+            toast.error(errorMessage, {
+                style: {
+                    background: '#fff0f0',
+                    color: 'var(--text-dark)',
+                    border: '1px solid #ff4444',
+                }
+            });
         }
     };
 
@@ -200,7 +251,17 @@ const Cart = () => {
                                     {cart.items.map(item => (
                                         <div key={item.itemId} className="cart-item">
                                             <div className="item-image">
-                                                <img src={item.imageUrl} alt={item.name} />
+                                                <Link to={`/item/${item.itemId}`}> {/* Wrap the image in a Link */}
+                                                    <img
+                                                        src={`/src/components/img/${item.itemId}.jpeg`}
+                                                        alt={item.name}
+                                                        onError={(e) => {
+                                                            e.target.src = '/images/default-rice.jpg'; // Fallback image
+                                                            console.error('Image load failed:', item.imageUrl);
+                                                        }}
+                                                        loading="lazy"
+                                                    />
+                                                </Link>
                                             </div>
                                             <div className="item-details">
                                                 <h3>{item.name}</h3>
@@ -290,6 +351,20 @@ const Cart = () => {
                         )}
                     </div>
                 )}
+
+                <ToastContainer
+                    position="bottom-right"
+                    autoClose={3000}
+                    hideProgressBar
+                    newestOnTop
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    toastClassName="custom-toast"
+                    progressClassName="custom-progress"
+                />
             </div>
         </ProtectedRoute>
     );

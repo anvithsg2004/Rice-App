@@ -12,10 +12,12 @@ const Header = () => {
     return (
         <header className="app-header">
             <div className="header-left">
-                <div className="logo">
-                    <div className="logo-icon">RG</div>
-                    <h1>Rice and Glory</h1>
-                </div>
+                <Link to="/" className="logo-link">
+                    <div className="logo">
+                        <div className="logo-icon">RG</div>
+                        <h1>Rice and Glory</h1>
+                    </div>
+                </Link>
             </div>
 
             <div className="header-right">
@@ -41,11 +43,6 @@ const Header = () => {
                                 Orders
                             </Link>
                         </li>
-                        {/* <li>
-                            <Link to="/add-item" className={({ isActive }) => isActive ? 'active' : ''}>
-                                Add Item
-                            </Link>
-                        </li> */}
                     </ul>
                 </nav>
                 <div className="user-icon">

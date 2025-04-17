@@ -21,12 +21,10 @@ function Register() {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            // Use direct axios call instead of apiCall to avoid auth header
-            await axios.post(`${API_BASE_URL}/users`, userData);
-            alert('Registration successful! Please login.');
-            navigate('/login');
+            await axios.post('http://localhost:8080/api/start-registration', userData);
+            navigate('/verify-otp', { state: { email: userData.email } });
         } catch (err) {
-            setError(err.response?.data || 'Registration failed. Please try again.');
+            setError(err.response?.data?.message || 'Registration failed. Please try again.');
         }
     };
 

@@ -10,6 +10,7 @@ import ItemDetailPage from '../components/ItemDetailPage';
 import AboutRicePage from '../components/AboutRicePage';
 import Login from '../components/Login'; // New import
 import Register from '../components/Register'; // New import
+import OTPVerification from '../components/OTPVerification';
 
 const router = createBrowserRouter([
     {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
                 path: 'register',
                 element: <Register />,
             },
+            {
+                path: 'verify-otp',
+                element: <OTPVerification />,
+            }
         ],
     },
 ]);

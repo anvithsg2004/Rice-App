@@ -11,6 +11,8 @@ import {
     deleteUser,
 } from '../api/userApi';
 import ProtectedRoute from '../Router/ProtectedRoute';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UserProfile = () => {
     const navigate = useNavigate(); // Add this
@@ -72,51 +74,160 @@ const UserProfile = () => {
         try {
             const updatedUserData = await updateUser(user);
             setUser(updatedUserData);
-            alert('Changes saved successfully!');
+            toast.success('Changes saved successfully!', {
+                style: {
+                    background: 'var(--primary-dark)',
+                    color: 'white',
+                    border: '1px solid var(--accent-gold)',
+                }
+            });
         } catch (error) {
-            setError('Failed to save changes');
+            toast.error('Failed to save changes', {
+                style: {
+                    background: '#fff0f0',
+                    color: 'var(--text-dark)',
+                    border: '1px solid #ff4444',
+                }
+            });
         } finally {
             setIsSaving(false);
         }
     };
 
     const handleDeleteAccount = async () => {
-        if (!window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-            return;
-        }
-
-        setIsDeleting(true);
-        try {
-            await deleteUser();
-            alert('Account deleted successfully!');
-            // Handle post-deletion (e.g., redirect to login)
-        } catch (error) {
-            setError('Failed to delete account');
-        } finally {
-            setIsDeleting(false);
-        }
+        toast.info(
+            <div className="confirm-toast">
+                <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+                <div className="confirm-buttons">
+                    <button onClick={async () => {
+                        toast.dismiss();
+                        try {
+                            await deleteUser();
+                            toast.success('Account deleted successfully!', {
+                                style: {
+                                    background: 'var(--primary-dark)',
+                                    color: 'white',
+                                    border: '1px solid var(--accent-gold)',
+                                }
+                            });
+                            localStorage.removeItem('authToken');
+                            localStorage.removeItem('user');
+                            navigate('/login');
+                        } catch (error) {
+                            toast.error('Failed to delete account', {
+                                style: {
+                                    background: '#fff0f0',
+                                    color: 'var(--text-dark)',
+                                    border: '1px solid #ff4444',
+                                }
+                            });
+                        }
+                    }}>
+                        Yes
+                    </button>
+                    <button onClick={() => toast.dismiss()}>
+                        No
+                    </button>
+                </div>
+            </div>,
+            {
+                autoClose: false,
+                closeOnClick: false,
+                draggable: false,
+                closeButton: false,
+                className: 'custom-confirm-toast'
+            }
+        );
     };
+
 
     const handleDeleteUPI = async (upi) => {
-        if (window.confirm('Are you sure you want to delete this UPI?')) {
-            try {
-                const updatedUser = await removeUPI(upi);
-                setUser(updatedUser);
-            } catch (error) {
-                setError('Failed to delete UPI');
+        toast.info(
+            <div className="confirm-toast">
+                <p>Are you sure you want to delete this UPI?</p>
+                <div className="confirm-buttons">
+                    <button onClick={async () => {
+                        toast.dismiss();
+                        try {
+                            const updatedUser = await removeUPI(upi);
+                            setUser(updatedUser);
+                            toast.success('UPI deleted successfully', {
+                                style: {
+                                    background: 'var(--primary-dark)',
+                                    color: 'white',
+                                    border: '1px solid var(--accent-gold)',
+                                }
+                            });
+                        } catch (error) {
+                            toast.error('Failed to delete UPI', {
+                                style: {
+                                    background: '#fff0f0',
+                                    color: 'var(--text-dark)',
+                                    border: '1px solid #ff4444',
+                                }
+                            });
+                        }
+                    }}>
+                        Yes
+                    </button>
+                    <button onClick={() => toast.dismiss()}>
+                        No
+                    </button>
+                </div>
+            </div>,
+            {
+                autoClose: false,
+                closeOnClick: false,
+                draggable: false,
+                closeButton: false,
+                className: 'custom-confirm-toast'
             }
-        }
+        );
     };
 
+
     const handleDeleteCard = async (card) => {
-        if (window.confirm('Are you sure you want to delete this card?')) {
-            try {
-                const updatedUser = await removePaymentMethod(card);
-                setUser(updatedUser);
-            } catch (error) {
-                setError('Failed to delete card');
+        toast.info(
+            <div className="confirm-toast">
+                <p>Are you sure you want to delete this card?</p>
+                <div className="confirm-buttons">
+                    <button onClick={async () => {
+                        toast.dismiss();
+                        try {
+                            const updatedUser = await removePaymentMethod(card);
+                            setUser(updatedUser);
+                            toast.success('Card deleted successfully', {
+                                style: {
+                                    background: 'var(--primary-dark)',
+                                    color: 'white',
+                                    border: '1px solid var(--accent-gold)',
+                                }
+                            });
+                        } catch (error) {
+                            toast.error('Failed to delete card', {
+                                style: {
+                                    background: '#fff0f0',
+                                    color: 'var(--text-dark)',
+                                    border: '1px solid #ff4444',
+                                }
+                            });
+                        }
+                    }}>
+                        Yes
+                    </button>
+                    <button onClick={() => toast.dismiss()}>
+                        No
+                    </button>
+                </div>
+            </div>,
+            {
+                autoClose: false,
+                closeOnClick: false,
+                draggable: false,
+                closeButton: false,
+                className: 'custom-confirm-toast'
             }
-        }
+        );
     };
 
     const handleAddUPI = async () => {
@@ -127,10 +238,22 @@ const UserProfile = () => {
                 setNewUPI('');
                 setShowAddUPI(false);
             } catch (error) {
-                setError('Failed to add UPI');
+                toast.error('Failed to add UPI', {
+                    style: {
+                        background: '#fff0f0',
+                        color: 'var(--text-dark)',
+                        border: '1px solid #ff4444',
+                    }
+                });
             }
         } else {
-            alert('Please enter a valid UPI ID.');
+            toast.error('Please enter a valid UPI ID.', {
+                style: {
+                    background: '#fff0f0',
+                    color: 'var(--text-dark)',
+                    border: '1px solid #ff4444',
+                }
+            });
         }
     };
 
@@ -143,32 +266,57 @@ const UserProfile = () => {
                 setNewCard({ number: '', expiry: '', cvv: '' });
                 setShowAddCard(false);
             } catch (error) {
-                setError('Failed to add payment method');
+                toast.error('Failed to add payment method', {
+                    style: {
+                        background: '#fff0f0',
+                        color: 'var(--text-dark)',
+                        border: '1px solid #ff4444',
+                    }
+                });
             }
         } else {
-            alert('Please fill all card details.');
+            toast.error('Please fill all card details.', {
+                style: {
+                    background: '#fff0f0',
+                    color: 'var(--text-dark)',
+                    border: '1px solid #ff4444',
+                }
+            });
         }
     };
 
     const validateForm = () => {
         const { name, phoneNumber, address, email } = user;
         if (!name.trim()) {
-            setError('Name is required');
-            return false;
-        }
-        if (!/^\+91 \d{10}$/.test(phoneNumber)) {
-            setError('Please enter a valid phone number in the format +91 1234567890');
+            toast.error('Name is required', {
+                style: {
+                    background: '#fff0f0',
+                    color: 'var(--text-dark)',
+                    border: '1px solid #ff4444',
+                }
+            });
             return false;
         }
         if (!address.trim()) {
-            setError('Address is required');
+            toast.error('Address is required', {
+                style: {
+                    background: '#fff0f0',
+                    color: 'var(--text-dark)',
+                    border: '1px solid #ff4444',
+                }
+            });
             return false;
         }
         if (!/^\S+@\S+\.\S+$/.test(email)) {
-            setError('Please enter a valid email address');
+            toast.error('Please enter a valid email address', {
+                style: {
+                    background: '#fff0f0',
+                    color: 'var(--text-dark)',
+                    border: '1px solid #ff4444',
+                }
+            });
             return false;
         }
-        setError(null);
         return true;
     };
 
@@ -204,7 +352,7 @@ const UserProfile = () => {
                                     value={user.phoneNumber}
                                     onChange={(e) => setUser({ ...user, phoneNumber: e.target.value })}
                                     aria-label="Phone Number"
-                                    placeholder="+91 1234567890"
+                                    placeholder="No need +91"
                                 />
                             </div>
 
@@ -401,6 +549,19 @@ const UserProfile = () => {
                         </div>
                     </div>
                 </div>
+                <ToastContainer
+                    position="bottom-right"
+                    autoClose={3000}
+                    hideProgressBar
+                    newestOnTop
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    toastClassName="custom-toast"
+                    progressClassName="custom-progress"
+                />
             </div>
         </ProtectedRoute>
     );

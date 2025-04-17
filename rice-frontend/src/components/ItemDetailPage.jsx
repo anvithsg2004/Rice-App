@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './css/ItemDetailPage.css';
 import { apiCall } from '../api/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ItemDetailPage = () => {
     const { itemId } = useParams();
@@ -21,7 +23,10 @@ const ItemDetailPage = () => {
                 if (!data) {
                     throw new Error('Item not found');
                 }
-                setItem(data);
+                setItem({
+                    ...data,
+                    imageUrl: `/src/components/img/${data.id}.jpeg`
+                });
             } catch (err) {
                 setError(err.message);
                 console.error('Error fetching item details:', err);
@@ -42,21 +47,26 @@ const ItemDetailPage = () => {
         try {
             const response = await apiCall('post', `/carts/add/${itemId}?quantity=${quantity}`);
 
-            // If successful
-            alert(`${quantity} kg of ${item.name} added to cart!`);
+            // Success toast
+            toast.success(`${quantity} kg of ${item.name} added to cart!`, {
+                icon: '🌾',
+                style: {
+                    background: 'var(--primary-dark)',
+                    color: 'white',
+                    border: '1px solid var(--accent-gold)',
+                }
+            });
 
-            // Optionally refresh cart data or update UI
         } catch (error) {
-            if (error.response && error.response.data) {
-                // Use the error message from the backend
-                alert(error.response.data.message || 'Failed to add item to cart');
-            } else {
-                // Generic error message if no specific error from backend
-                alert('Cannot add more than the maximum quantity allowed');
-            }
-
-            // Optionally update state to show error in UI instead of alert
-            // setError(error.response?.data?.message || 'Failed to add item to cart');
+            // Error toast
+            const errorMessage = error.response?.data?.message || 'Cannot add more than the maximum quantity allowed';
+            toast.error(errorMessage, {
+                style: {
+                    background: '#fff0f0',
+                    color: 'var(--text-dark)',
+                    border: '1px solid #ff4444',
+                }
+            });
         }
     };
 
@@ -97,6 +107,12 @@ const ItemDetailPage = () => {
         );
     }
 
+    // Add image error handling
+    const handleImageError = (e) => {
+        e.target.src = '/images/default-rice.jpg';
+        console.error('Image load failed:', e.target.src);
+    };
+
     return (
         <div className="item-detail-container">
             <div className="item-header">
@@ -106,7 +122,11 @@ const ItemDetailPage = () => {
 
             <div className="item-content">
                 <div className="item-image-container">
-                    <img src={item.imageUrl} alt={item.name} />
+                    <img
+                        src={item.imageUrl}
+                        alt={item.name}
+                        onError={handleImageError}
+                    />
                 </div>
 
                 <div className="item-info-container">
@@ -161,6 +181,20 @@ const ItemDetailPage = () => {
                     </button>
                 </div>
             </div>
+
+            <ToastContainer
+                position="bottom-right"
+                autoClose={3000}
+                hideProgressBar
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                toastClassName="custom-toast"
+                progressClassName="custom-progress"
+            />
         </div>
     );
 };

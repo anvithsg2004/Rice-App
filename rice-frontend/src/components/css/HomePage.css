@@ -141,9 +141,11 @@ p {
     box-shadow: var(--shadow-md);
 }
 
-.new-arrivals-slider {
+.new-arrivals-slider,
+.highest-bought-slider {
     display: flex;
-    transition: transform var(--transition-md);
+    transition: transform 0.3s ease;
+    /* Ensure smooth transition */
 }
 
 .new-arrivals-item {

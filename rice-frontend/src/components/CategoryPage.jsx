@@ -15,18 +15,6 @@ const CategoryPage = () => {
     const [error, setError] = useState(null);
     const [typeNotFoundError, setTypeNotFoundError] = useState(false);
 
-    // Function to convert Google Drive view link to direct image URL
-    const getDirectImageUrl = (url) => {
-        if (url && url.includes('drive.google.com')) {
-            const match = url.match(/\/d\/([^\/]+)\/view/);
-            if (match && match[1]) {
-                const fileId = match[1];
-                return `https://drive.google.com/uc?id=${fileId}`;
-            }
-        }
-        return url;
-    };
-
     useEffect(() => {
         const fetchRiceItems = async () => {
             setIsLoading(true);
@@ -35,29 +23,28 @@ const CategoryPage = () => {
 
             try {
                 let data;
-
                 if (selectedType === 'All') {
                     data = await getAllCategories();
                 } else {
                     data = await getCategoryByName(selectedType);
                 }
 
-                // Ensure data is an array
                 if (!Array.isArray(data)) {
                     data = [data];
                 }
 
-                // Flatten the rice items from categories
                 const items = data.flatMap(category => {
-                    return category.riceItems.map(item => ({
-                        id: item.id,
-                        name: item.name || 'Unnamed Rice', // Provide default values
-                        description: item.description || 'No description available',
-                        finalPrice: item.finalPrice || 0, // Ensure finalPrice is a number
-                        imageUrl: getDirectImageUrl(item.imageUrl) || '/images/default-rice.jpg',
-                        inStock: item.quantity > 0, // Determine if in stock based on quantity
-                        type: category.name
-                    }));
+                    return category.riceItems.map(item => {
+                        return {
+                            id: item.id,
+                            name: item.name || 'Unnamed Rice',
+                            description: item.description || 'No description available',
+                            finalPrice: item.finalPrice || 0,
+                            imageUrl: `/src/components/img/${item.id}.jpeg`,
+                            inStock: item.quantity > 0,
+                            type: category.name
+                        };
+                    });
                 });
 
                 if (items.length === 0) {
@@ -78,7 +65,7 @@ const CategoryPage = () => {
                 setPriceRange([0, calculatedMaxPrice]);
                 setIsLoading(false);
             } catch (err) {
-                // setError('Failed to fetch rice items. Please try again later.');
+                setError('Failed to fetch rice items. Please try again later.');
                 setIsLoading(false);
                 console.error('Error fetching rice items:', err);
             }
@@ -120,7 +107,6 @@ const CategoryPage = () => {
     return (
         <div className="category-page">
             <h1>Rice Categories</h1>
-
             {isLoading ? (
                 <div className="loading">Loading...</div>
             ) : error ? (
@@ -208,10 +194,9 @@ const CategoryPage = () => {
                                                 src={item.imageUrl}
                                                 alt={item.name}
                                                 loading="lazy"
-                                                // Add referrerpolicy to handle potential referrer issues
-                                                referrerpolicy="no-referrer"
                                                 onError={(e) => {
                                                     e.target.src = '/images/default-rice.jpg';
+                                                    console.error('Image load failed:', item.imageUrl);
                                                 }}
                                             />
                                             {!item.inStock && (
@@ -223,9 +208,7 @@ const CategoryPage = () => {
                                             <p className="item-description">{item.description}</p>
                                             <div className="item-meta">
                                                 <span className="price">
-                                                    ₹{item.finalPrice !== undefined && item.finalPrice !== null
-                                                        ? item.finalPrice.toFixed(2)
-                                                        : '0.00'}
+                                                    ₹{item.finalPrice?.toFixed(2) || '0.00'}
                                                 </span>
                                             </div>
                                         </div>
