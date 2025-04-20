@@ -1,7 +1,7 @@
 // api.js
 import axios from 'axios';
 
-export const API_BASE_URL = 'http://localhost:8080/api';
+export const API_BASE_URL = 'https://riceandglory.netlify.app';
 
 // Create a clean axios instance without auth headers
 const plainAxios = axios.create();
