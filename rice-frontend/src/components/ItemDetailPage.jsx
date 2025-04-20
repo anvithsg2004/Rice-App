@@ -25,7 +25,7 @@ const ItemDetailPage = () => {
                 }
                 setItem({
                     ...data,
-                    imageUrl: `/src/components/img/${data.id}.jpeg`
+                    imageUrl: `/images/${data.id}.jpeg`
                 });
             } catch (err) {
                 setError(err.message);

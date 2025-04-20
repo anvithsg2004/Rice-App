@@ -82,7 +82,7 @@ const AboutRicePage = () => {
                     <div className="variety-card">
                         <Link to="/item/67f08d9b5cfea66e0ad55053">
                             <img
-                                src={`/src/components/img/67f08d9b5cfea66e0ad55053.jpeg`}
+                                src={`/images/67f08d9b5cfea66e0ad55053.jpeg`}
                                 alt="Superfino Arborio Rice"
                                 loading="lazy"
                             />
@@ -93,7 +93,7 @@ const AboutRicePage = () => {
                     <div className="variety-card">
                         <Link to="/item/67f08e125cfea66e0ad55065">
                             <img
-                                src={`/src/components/img/67f08e125cfea66e0ad55065.jpeg`}
+                                src={`/images/67f08e125cfea66e0ad55065.jpeg`}
                                 alt="Cultivated Wild Rice"
                                 loading="lazy"
                             />
@@ -104,7 +104,7 @@ const AboutRicePage = () => {
                     <div className="variety-card">
                         <Link to="/item/67f08e055cfea66e0ad55062">
                             <img
-                                src={`/src/components/img/67f08e055cfea66e0ad55062.jpeg`}
+                                src={`/images/67f08e055cfea66e0ad55062.jpeg`}
                                 alt="Northern Wild Rice"
                                 loading="lazy"
                             />

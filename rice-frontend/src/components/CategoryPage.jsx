@@ -40,7 +40,7 @@ const CategoryPage = () => {
                             name: item.name || 'Unnamed Rice',
                             description: item.description || 'No description available',
                             finalPrice: item.finalPrice || 0,
-                            imageUrl: `/src/components/img/${item.id}.jpeg`,
+                            imageUrl: `/images/${item.id}.jpeg`,
                             inStock: item.quantity > 0,
                             type: category.name
                         };

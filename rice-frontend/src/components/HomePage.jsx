@@ -9,42 +9,42 @@ const HomePage = () => {
             name: 'Traditional Basmati',
             description: 'Aged long-grain rice with a highly aromatic fragrance.',
             price: '₹170',
-            image: `/src/components/img/67f08d055cfea66e0ad55048.jpeg`,
+            image: `/images/67f08d055cfea66e0ad55048.jpeg`,
         },
         {
             id: 2,
             name: 'Vietnamese Jasmine Rice',
             description: 'Similar to Thai Jasmine rice but slightly softer and less fragrant.',
             price: '₹493',
-            image: `/src/components/img/67f08d915cfea66e0ad55052.jpeg`,
+            image: `/images/67f08d915cfea66e0ad55052.jpeg`,
         },
         {
             id: 3,
             name: 'Northern Wild Rice',
             description: 'Grown in Canada, this variety has a firm texture and a slightly smoky flavor.',
             price: '₹553',
-            image: `/src/components/img/67f08e055cfea66e0ad55062.jpeg`,
+            image: `/images/67f08e055cfea66e0ad55062.jpeg`,
         },
         {
             id: 4,
             name: 'Indonesian Black Rice',
             description: 'Naturally sweet black rice variety used in Indonesian desserts.',
             price: '₹475',
-            image: `/src/components/img/67f08e3f5cfea66e0ad5506c.jpeg`,
+            image: `/images/67f08e3f5cfea66e0ad5506c.jpeg`,
         },
         {
             id: 5,
             name: 'Sugandha Basmati',
             description: 'Long-grain variety with mild fragrance, primarily used in everyday meals.',
             price: '₹132',
-            image: `/src/components/img/67f08d375cfea66e0ad5504e.jpeg`,
+            image: `/images/67f08d375cfea66e0ad5504e.jpeg`,
         },
         {
             id: 6,
             name: 'Long-Grain Brown Rice',
             description: 'Firm, less sticky variety that retains the bran layer, making it more nutritious than white rice.',
             price: '₹468',
-            image: `/src/components/img/67f08df25cfea66e0ad5505e.jpeg`,
+            image: `/images/67f08df25cfea66e0ad5505e.jpeg`,
         },
     ];
 
@@ -54,42 +54,42 @@ const HomePage = () => {
             name: 'Sharbati Basmati',
             description: 'More affordable variety with a mild aroma, often used as a substitute for premium Basmati.',
             price: '₹126',
-            image: `/src/components/img/67f08d2f5cfea66e0ad5504d.jpeg`,
+            image: `/images/67f08d2f5cfea66e0ad5504d.jpeg`,
         },
         {
             id: 2,
             name: 'Sugandha Basmati',
             description: 'Long-grain variety with mild fragrance, primarily used in everyday meals.',
             price: '₹132',
-            image: `/src/components/img/67f08d375cfea66e0ad5504e.jpeg`,
+            image: `/images/67f08d375cfea66e0ad5504e.jpeg`,
         },
         {
             id: 3,
             name: 'Manoomin (Native American Wild Rice)',
             description: 'Hand-harvested wild rice with a distinct nutty flavor, commonly used in Native American cuisine.',
             price: '₹563',
-            image: `/src/components/img/67f08e0c5cfea66e0ad55064.jpeg`,
+            image: `/images/67f08e0c5cfea66e0ad55064.jpeg`,
         },
         {
             id: 4,
             name: 'Indonesian Black Rice',
             description: 'Naturally sweet black rice variety used in Indonesian desserts.',
             price: '₹475',
-            image: `/src/components/img/67f08e3f5cfea66e0ad5506c.jpeg`,
+            image: `/images/67f08e3f5cfea66e0ad5506c.jpeg`,
         },
         {
             id: 5,
             name: 'Black Glutinous Rice',
             description: 'Dark purple variety of sticky rice with a nutty flavor.',
             price: '₹477',
-            image: `/src/components/img/67f08ea15cfea66e0ad55070.jpeg`,
+            image: `/images/67f08ea15cfea66e0ad55070.jpeg`,
         },
         {
             id: 6,
             name: 'Thai Red Cargo Rice',
             description: 'Dense, chewy rice used in Thai cuisine, known for its reddish-brown color.',
             price: '₹493',
-            image: `/src/components/img/67f08e1e5cfea66e0ad55068.jpeg`,
+            image: `/images/67f08e1e5cfea66e0ad55068.jpeg`,
         },
     ];
 
@@ -157,7 +157,7 @@ const HomePage = () => {
                 </p>
                 <div className="about-rice-preview">
                     <img
-                        src="src\components\Images\HomePage\pexels-photo-2589457.jpeg"
+                        src="\images\pexels-photo-2589457.jpeg"
                         alt="Rice Field"
                         loading="lazy"
                     />

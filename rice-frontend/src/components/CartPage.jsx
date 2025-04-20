@@ -253,7 +253,7 @@ const Cart = () => {
                                             <div className="item-image">
                                                 <Link to={`/item/${item.itemId}`}> {/* Wrap the image in a Link */}
                                                     <img
-                                                        src={`/src/components/img/${item.itemId}.jpeg`}
+                                                        src={`/images/${item.itemId}.jpeg`}
                                                         alt={item.name}
                                                         onError={(e) => {
                                                             e.target.src = '/images/default-rice.jpg'; // Fallback image
