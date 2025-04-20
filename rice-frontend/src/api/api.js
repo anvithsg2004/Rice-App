@@ -1,7 +1,7 @@
 // api.js
 import axios from 'axios';
 
-export const API_BASE_URL = 'http://localhost:5173';
+export const API_BASE_URL = 'http://localhost:8080';
 
 // Create a clean axios instance without auth headers
 const plainAxios = axios.create();
