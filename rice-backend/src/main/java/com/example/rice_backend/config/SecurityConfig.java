@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll() // Registration remains public
-                        .requestMatchers("/api/categories", "api/rice-items").permitAll() // Keep other public endpoints
+                        .requestMatchers("/api/categories", "/api/rice-items").permitAll() // Keep other public endpoints
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/start-registration").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/verify-otp").permitAll()
