@@ -24,9 +24,12 @@ public class PaymentService {
     @Value("${razorpay.key.secret}")
     private String razorpayKeySecret;
 
+    // In PaymentService.java, modify the createOrder method
     public String createOrder(double amount) throws RazorpayException {
         JSONObject orderRequest = new JSONObject();
-        orderRequest.put("amount", amount * 100); // Amount in paise
+        // Convert to paise and ensure integer value
+        int amountInPaise = (int) Math.round(amount * 100);
+        orderRequest.put("amount", amountInPaise);
         orderRequest.put("currency", "INR");
         orderRequest.put("receipt", "order_rcptid_" + System.currentTimeMillis());
         orderRequest.put("payment_capture", 1);

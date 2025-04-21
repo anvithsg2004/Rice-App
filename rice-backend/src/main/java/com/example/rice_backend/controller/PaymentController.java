@@ -42,7 +42,12 @@ public class PaymentController {
             cart.setVersion(cart.getVersion() + 1);
             cartRepository.save(cart);
 
+            // Validate total amount
             double totalAmount = cart.getTotal();
+            if (totalAmount <= 0) {
+                return ResponseEntity.badRequest().body(Map.of("message", "Invalid cart total amount"));
+            }
+
             String razorpayOrderId = paymentService.createOrder(totalAmount);
 
             cart.setRazorpayOrderId(razorpayOrderId);

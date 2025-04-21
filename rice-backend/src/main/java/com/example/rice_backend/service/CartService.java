@@ -105,13 +105,19 @@ public class CartService {
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
 
-        double shipping = subtotal > 1000 ? 0 : 50;
-        double tax = subtotal * 0.05;
-        double total = subtotal + shipping + tax - cart.getDiscount();
+        // Round to 2 decimal places at each step
+        subtotal = Math.round(subtotal * 100.0) / 100.0;
+        double shipping = Math.round(cart.getShipping() * 100.0) / 100.0;
+        double tax = Math.round(subtotal * 0.05 * 100.0) / 100.0; // 5% tax example
+        double discount = Math.round(cart.getDiscount() * 100.0) / 100.0;
+
+        double total = subtotal + shipping + tax - discount;
+        total = Math.round(total * 100.0) / 100.0;  // Final rounding
 
         cart.setSubtotal(subtotal);
         cart.setShipping(shipping);
         cart.setTax(tax);
+        cart.setDiscount(discount);
         cart.setTotal(total);
     }
 
