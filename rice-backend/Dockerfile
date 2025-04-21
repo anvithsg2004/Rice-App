@@ -16,4 +16,4 @@ COPY --from=build /app/target/rice-backend-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/app/backend-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "rice-backend-0.0.1-SNAPSHOT.jar"]
