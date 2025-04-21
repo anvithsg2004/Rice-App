@@ -1,7 +1,7 @@
 // api.js
 import axios from 'axios';
 
-export const API_BASE_URL = 'https://rice-app-96yh.onrender.com/api';
+export const API_BASE_URL = 'https://rice-app-kl2g.onrender.com/api';
 
 // Create a clean axios instance without auth headers
 const plainAxios = axios.create();

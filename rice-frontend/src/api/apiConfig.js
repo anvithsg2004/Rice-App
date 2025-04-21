@@ -1,1 +1,1 @@
-export const API_BASE_URL = 'https://rice-app-96yh.onrender.com/api';
+export const API_BASE_URL = 'https://rice-app-kl2g.onrender.com/api';
