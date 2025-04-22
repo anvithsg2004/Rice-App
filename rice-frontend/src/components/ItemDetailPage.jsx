@@ -70,6 +70,30 @@ const ItemDetailPage = () => {
         }
     };
 
+    const handleShareClick = async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            // Success toast
+            toast.success('Link copied to clipboard!', {
+                icon: '📋',
+                style: {
+                    background: 'var(--primary-dark)',
+                    color: 'white',
+                    border: '1px solid var(--accent-gold)',
+                }
+            });
+        } catch (err) {
+            // Error toast
+            toast.error('Failed to copy link', {
+                style: {
+                    background: '#fff0f0',
+                    color: 'var(--text-dark)',
+                    border: '1px solid #ff4444',
+                }
+            });
+        }
+    };
+
     const handleIncreaseQuantity = () => {
         if (quantity < (item.quantity || 10)) {
             setQuantity(quantity + 1);
@@ -178,6 +202,12 @@ const ItemDetailPage = () => {
                         onClick={handleAddToCart}
                     >
                         Add to Cart
+                    </button>
+                    <button
+                        className="share-button"
+                        onClick={handleShareClick}
+                    >
+                        Share
                     </button>
                 </div>
             </div>

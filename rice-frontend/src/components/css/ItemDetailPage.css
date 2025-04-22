@@ -359,3 +359,33 @@ body {
         opacity: 0;
     }
 }
+
+/* Add these styles to your CSS file */
+.share-button {
+    width: 100%;
+    padding: 1rem;
+    background: transparent;
+    border: 2px solid var(--primary-dark);
+    color: var(--primary-dark);
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-md);
+    margin-top: 1rem;
+}
+
+.share-button:hover {
+    background: var(--primary-dark);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .share-button {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+}
