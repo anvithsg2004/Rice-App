@@ -21,7 +21,7 @@ function Register() {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8080/api/start-registration', userData);
+            await axios.post('https://rice-app-kl2g.onrender.com/api/start-registration', userData);
             navigate('/verify-otp', { state: { email: userData.email } });
         } catch (err) {
             setError(err.response?.data?.message || 'Registration failed. Please try again.');
