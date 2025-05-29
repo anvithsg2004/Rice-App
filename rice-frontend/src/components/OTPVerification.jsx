@@ -14,7 +14,7 @@ const OTPVerification = () => {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            await axios.post('https://rice-app-kl2g.onrender.com/api/verify-otp', { email, otp });
+            await axios.post('https://rice-app-gec2.onrender.com/api/verify-otp', { email, otp });
             navigate('/login');
         } catch (error) {
             setError(error.response?.data?.message || 'Verification failed');
