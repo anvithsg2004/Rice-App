@@ -1,3 +1,244 @@
+/* ============================================================
+   Global base styles, resets, and shared utilities
+   ============================================================ */
+
+@import './tokens.css';
+
+/* ------- Reset ------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
 body {
-    background-color: white;
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    background-color: var(--bg-base);
+    line-height: var(--leading-normal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+    color: inherit;
+}
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+a {
+    color: var(--text-link);
+    text-decoration: none;
+    transition: color var(--duration-base) var(--ease-out);
+}
+
+ol, ul {
+    list-style: none;
+}
+
+/* ------- Typography defaults ------- */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-body);
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-snug);
+}
+
+p {
+    color: var(--text-secondary);
+    line-height: var(--leading-normal);
+}
+
+/* ------- Selection / scrollbar ------- */
+::selection {
+    background: var(--brand-100);
+    color: var(--brand-800);
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-subtle);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gray-medium);
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--bg-subtle);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-tertiary);
+}
+
+/* ------- Focus rings ------- */
+:focus-visible {
+    outline: 2px solid var(--brand-500);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+}
+
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+    outline-offset: 3px;
+}
+
+/* ------- Shared utility classes ------- */
+.container {
+    width: 100%;
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    padding-left: clamp(1rem, 4vw, 2rem);
+    padding-right: clamp(1rem, 4vw, 2rem);
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Skeleton shimmer */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--bg-muted) 25%,
+        var(--bg-subtle) 50%,
+        var(--bg-muted) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+    border-radius: var(--radius-sm);
+}
+
+@keyframes skeleton-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Fade-in utility */
+.fade-in {
+    animation: fade-in-up var(--duration-slow) var(--ease-out);
+}
+
+@keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+    from { opacity: 0; transform: scale(0.96); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* Section anchors */
+section {
+    scroll-margin-top: calc(var(--header-height) + var(--space-4));
+}
+
+/* ============================================================
+   Toast (react-toastify) global theming
+   ============================================================ */
+.Toastify__toast {
+    font-family: var(--font-body) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--shadow-lg) !important;
+    padding: var(--space-4) !important;
+    background: var(--bg-surface) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-subtle) !important;
+}
+
+.Toastify__toast--success {
+    border-left: 4px solid var(--success) !important;
+}
+
+.Toastify__toast--error {
+    border-left: 4px solid var(--danger) !important;
+}
+
+.Toastify__toast--info {
+    border-left: 4px solid var(--info) !important;
+}
+
+.Toastify__toast--warning {
+    border-left: 4px solid var(--warning) !important;
+}
+
+.Toastify__toast-body {
+    font-size: var(--fs-sm);
+    line-height: var(--leading-snug);
+    padding: 0 !important;
+}
+
+.Toastify__close-button {
+    color: var(--text-tertiary) !important;
+    opacity: 0.7 !important;
+    align-self: center !important;
+}
+
+.Toastify__close-button:hover {
+    opacity: 1 !important;
+    color: var(--text-primary) !important;
+}
+
+/* ------- Motion preferences ------- */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .skeleton,
+    .fade-in {
+        animation: none;
+    }
 }

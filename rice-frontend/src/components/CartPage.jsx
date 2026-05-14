@@ -3,9 +3,9 @@ import './css/Cart.css';
 import { useNavigate, Link } from 'react-router-dom';
 import ProtectedRoute from '../Router/ProtectedRoute';
 import { apiCall } from '../api/api';
-import Razorpay from 'razorpay';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Loading from './Loading';
 
 const Cart = () => {
     const [cart, setCart] = useState(null);
@@ -249,15 +249,19 @@ const Cart = () => {
             <div className="cart-page">
                 <h1>Your Shopping Cart</h1>
 
-                {loading && <div className="loading">Loading cart...</div>}
+                {loading && <Loading variant="branded" size="lg" label="Loading your cart…" />}
                 {error && <div className="error-message">{error}</div>}
 
                 {!loading && !error && (
                     <div className="cart-container">
                         {!cart || cart.items.length === 0 ? (
                             <div className="empty-cart">
-                                <p>Your cart is empty</p>
-                                <p>Explore our <a href="/categories">rice collection</a> to find the perfect varieties!</p>
+                                <div className="empty-cart-icon" aria-hidden="true">🛒</div>
+                                <h2>Your cart is empty</h2>
+                                <p>Looks like you haven't added any rice yet.</p>
+                                <Link to="/categories" className="empty-cart-cta">
+                                    Browse rice collection
+                                </Link>
                             </div>
                         ) : (
                             <div className="cart-content">
@@ -310,6 +314,27 @@ const Cart = () => {
                                 </div>
 
                                 <div className="cart-summary">
+                                    {cart.subtotal < 1000 && (
+                                        <div className="free-shipping-progress">
+                                            <div className="progress-text">
+                                                <span>🚚 Add <strong>₹{(1000 - cart.subtotal).toFixed(2)}</strong> more for free shipping</span>
+                                            </div>
+                                            <div className="progress-bar">
+                                                <div
+                                                    className="progress-bar-fill"
+                                                    style={{ width: `${Math.min((cart.subtotal / 1000) * 100, 100)}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+                                    {cart.subtotal >= 1000 && (
+                                        <div className="free-shipping-progress earned">
+                                            <div className="progress-text">
+                                                <span>🎉 You've unlocked <strong>free shipping</strong>!</span>
+                                            </div>
+                                        </div>
+                                    )}
+
                                     <div className="promo-section">
                                         <h3>Apply Promo Code</h3>
                                         <div className="promo-input">
@@ -331,25 +356,25 @@ const Cart = () => {
 
                                     <div className="order-summary">
                                         <div className="summary-row">
-                                            <span>Subtotal:</span>
+                                            <span>Subtotal</span>
                                             <span>₹{cart.subtotal.toFixed(2)}</span>
                                         </div>
                                         <div className="summary-row">
-                                            <span>Shipping:</span>
-                                            <span>₹{cart.shipping.toFixed(2)}</span>
+                                            <span>Shipping</span>
+                                            <span>{cart.shipping === 0 ? <span className="free-tag">FREE</span> : `₹${cart.shipping.toFixed(2)}`}</span>
                                         </div>
                                         <div className="summary-row">
-                                            <span>Tax (5%):</span>
+                                            <span>Tax (5%)</span>
                                             <span>₹{cart.tax.toFixed(2)}</span>
                                         </div>
                                         {discount > 0 && (
                                             <div className="summary-row discount">
-                                                <span>Promo Discount:</span>
+                                                <span>Promo Discount</span>
                                                 <span>-₹{discount.toFixed(2)}</span>
                                             </div>
                                         )}
                                         <div className="summary-row total">
-                                            <span>Total:</span>
+                                            <span>Total</span>
                                             <span>₹{(cart.total - discount).toFixed(2)}</span>
                                         </div>
                                     </div>

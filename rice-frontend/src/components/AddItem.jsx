@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-// import './css/AddItem.css';
+import './css/AddItem.css';
 import { addItem } from '../api/addItemApi';
+import Loading from './Loading';
 
 const AddItem = () => {
     const [formData, setFormData] = useState({
@@ -318,10 +319,7 @@ const AddItem = () => {
                     disabled={isSubmitting}
                 >
                     {isSubmitting ? (
-                        <>
-                            <span className="spinner"></span>
-                            Adding Item...
-                        </>
+                        <Loading variant="dots" size="sm" inline label="Adding item" />
                     ) : (
                         'Add Item'
                     )}

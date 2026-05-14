@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './css/Order.css';
 import ProtectedRoute from '../Router/ProtectedRoute';
 import { apiCall } from '../api/api';
-import { useNavigate } from 'react-router-dom'; // Make sure this line exists
+import { useNavigate } from 'react-router-dom';
+import Loading from './Loading';
 
 const Order = () => {
     const navigate = useNavigate();
@@ -122,7 +123,7 @@ const Order = () => {
             <div className="order-page">
                 <h1>My Rice Orders</h1>
 
-                {loading && <div className="loading">Loading orders...</div>}
+                {loading && <Loading variant="branded" size="lg" label="Loading your orders…" />}
                 {error && <div className="error-message">{error}</div>}
 
                 {!loading && !error && (
@@ -179,15 +180,32 @@ const Order = () => {
                                 {currentOrders.map(order => (
                                     <div key={order.id} className="order-card">
                                         <div className="order-header">
-                                            <div>
-                                                <h3>Order #{order.id}</h3>
-                                                <p>Ordered on: {new Date(order.date).toLocaleDateString()}</p>
+                                            <div className="order-header-main">
+                                                <span className="order-id-label">Order</span>
+                                                <h3 className="order-id">
+                                                    <span>#{order.id?.slice(-8) || order.id}</span>
+                                                    <button
+                                                        type="button"
+                                                        className="copy-id-button"
+                                                        onClick={() => {
+                                                            navigator.clipboard?.writeText(order.id);
+                                                        }}
+                                                        aria-label="Copy order ID"
+                                                        title="Copy full order ID"
+                                                    >
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                                        </svg>
+                                                    </button>
+                                                </h3>
+                                                <p>Placed on {new Date(order.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                                             </div>
                                             {getStatusBadge(order.status)}
                                         </div>
 
                                         <div className="order-tracking">
-                                            <h4>Order Tracking</h4>
+                                            <h4>Order tracking</h4>
                                             <div className="tracking-steps">
                                                 <div className="tracking-step completed">
                                                     <span className="step-icon">1</span>
@@ -209,7 +227,7 @@ const Order = () => {
                                         </div>
 
                                         <div className="order-items">
-                                            <h4>Rice Items:</h4>
+                                            <h4>Items in this order</h4>
                                             <ul>
                                                 {order.items.map(item => (
                                                     <li key={item.id}>
@@ -224,30 +242,29 @@ const Order = () => {
 
                                         <div className="order-summary">
                                             <div className="summary-row">
-                                                <span>Total Weight:</span>
+                                                <span>Total weight</span>
                                                 <span>{order.items.reduce((sum, item) => sum + (item.weight * item.quantity), 0)} kg</span>
                                             </div>
 
                                             <div className="summary-row">
-                                                <span>Subtotal:</span>
+                                                <span>Subtotal</span>
                                                 <span>₹{order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)}</span>
                                             </div>
 
                                             <div className="summary-row">
-                                                <span>Payment Method:</span>
+                                                <span>Payment</span>
                                                 <span>{order.paymentMethod || 'UPI'}</span>
                                             </div>
 
                                             <div className="summary-row">
-                                                <span>Delivery Address:</span>
-                                                <span>
-                                                    {order.deliveryAddress?.street &&
-                                                        `${order.deliveryAddress.street}, 
-                ${order.deliveryAddress.city}, 
-                ${order.deliveryAddress.state} - 
-                ${order.deliveryAddress.pincode}`
+                                                <span>Delivery address</span>
+                                                <span className="address-value">
+                                                    {typeof order.deliveryAddress === 'string'
+                                                        ? order.deliveryAddress
+                                                        : order.deliveryAddress?.street
+                                                            ? `${order.deliveryAddress.street}, ${order.deliveryAddress.city}, ${order.deliveryAddress.state} - ${order.deliveryAddress.pincode}`
+                                                            : <em className="muted">Not provided</em>
                                                     }
-                                                    {!order.deliveryAddress?.street && 'No delivery address provided'}
                                                 </span>
                                             </div>
                                         </div>

@@ -13,6 +13,18 @@ import {
 import ProtectedRoute from '../Router/ProtectedRoute';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Loading from './Loading';
+
+const detectCardBrand = (number = '') => {
+    const n = number.replace(/\D/g, '');
+    if (/^4/.test(n)) return 'visa';
+    if (/^5[1-5]/.test(n)) return 'mastercard';
+    if (/^3[47]/.test(n)) return 'amex';
+    if (/^6(?:011|5)/.test(n)) return 'discover';
+    if (/^35/.test(n)) return 'jcb';
+    if (/^60|^65/.test(n)) return 'rupay';
+    return 'card';
+};
 
 const UserProfile = () => {
     const navigate = useNavigate(); // Add this
@@ -320,13 +332,32 @@ const UserProfile = () => {
         return true;
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) {
+        return (
+            <ProtectedRoute>
+                <div className="user-profile">
+                    <Loading variant="branded" size="lg" label="Loading your profile…" />
+                </div>
+            </ProtectedRoute>
+        );
+    }
     if (error) return <div className="error-message">{error}</div>;
+
+    const userInitial = (user.name || user.email || 'U').trim().charAt(0).toUpperCase();
 
     return (
         <ProtectedRoute>
             <div className="user-profile">
-                <h1>Profile</h1>
+                <h1>My Profile</h1>
+
+                <div className="profile-hero">
+                    <div className="profile-hero-avatar" aria-hidden="true">{userInitial}</div>
+                    <div className="profile-hero-details">
+                        <div className="profile-hero-name">{user.name || 'Welcome'}</div>
+                        <div className="profile-hero-email">{user.email}</div>
+                    </div>
+                </div>
+
                 <div className="profile-container">
                     <div className="profile-info">
                         {error && <div className="error-message">{error}</div>}
@@ -448,21 +479,36 @@ const UserProfile = () => {
 
                             <div className="saved-payments">
                                 <h3>Saved Cards</h3>
-                                <ul>
-                                    {user.savedCards?.map((card) => (
-                                        <li key={`${card.number}-${card.expiry}`}>
-                                            {card.number} | Expires: {card.expiry}
-                                            <button
-                                                type="button"
-                                                className="delete-item-button"
-                                                onClick={() => handleDeleteCard(card)}
-                                                aria-label={`Delete Card ${card.number}`}
-                                            >
-                                                Delete
-                                            </button>
-                                        </li>
-                                    ))}
-                                </ul>
+                                <div className="cards-list">
+                                    {user.savedCards?.map((card) => {
+                                        const last4 = (card.number || '').replace(/\D/g, '').slice(-4);
+                                        const masked = `•••• •••• •••• ${last4 || '••••'}`;
+                                        const brand = detectCardBrand(card.number);
+                                        return (
+                                            <div key={`${card.number}-${card.expiry}`} className={`payment-card payment-card--${brand}`}>
+                                                <div className="payment-card-top">
+                                                    <span className="payment-card-brand">{brand.toUpperCase()}</span>
+                                                    <span className="payment-card-chip" aria-hidden="true">▪▪</span>
+                                                </div>
+                                                <div className="payment-card-number">{masked}</div>
+                                                <div className="payment-card-bottom">
+                                                    <div>
+                                                        <span className="payment-card-label">Expires</span>
+                                                        <span className="payment-card-value">{card.expiry}</span>
+                                                    </div>
+                                                    <button
+                                                        type="button"
+                                                        className="payment-card-remove"
+                                                        onClick={() => handleDeleteCard(card)}
+                                                        aria-label="Remove card"
+                                                    >
+                                                        Remove
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                                 <button
                                     type="button"
                                     className="add-button"

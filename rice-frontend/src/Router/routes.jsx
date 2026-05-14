@@ -8,14 +8,16 @@ import OrderPage from '../components/Order';
 import Cart from '../components/CartPage';
 import ItemDetailPage from '../components/ItemDetailPage';
 import AboutRicePage from '../components/AboutRicePage';
-import Login from '../components/Login'; // New import
-import Register from '../components/Register'; // New import
+import Login from '../components/Login';
+import Register from '../components/Register';
 import OTPVerification from '../components/OTPVerification';
+import NotFound from '../components/NotFound';
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <RootLayout />,
+        errorElement: <NotFound />,
         children: [
             {
                 index: true,
@@ -60,6 +62,10 @@ const router = createBrowserRouter([
             {
                 path: 'verify-otp',
                 element: <OTPVerification />,
+            },
+            {
+                path: '*',
+                element: <NotFound />,
             }
         ],
     },

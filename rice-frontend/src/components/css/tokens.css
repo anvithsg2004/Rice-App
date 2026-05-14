@@ -1,0 +1,163 @@
+/* ============================================================
+   Rice & Glory — Design Tokens
+   Single source of truth for colors, spacing, radii, shadows,
+   typography, motion. All page styles should reference these.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+    /* === BRAND / SEMANTIC COLOR === */
+    --brand-50:  #ECF7EE;
+    --brand-100: #D2EBD7;
+    --brand-200: #A6D7B0;
+    --brand-300: #79C28A;
+    --brand-400: #4CAE63;
+    --brand-500: #2E7D32;   /* primary */
+    --brand-600: #266929;
+    --brand-700: #1B5E20;   /* dark primary */
+    --brand-800: #134018;
+    --brand-900: #0B270F;
+
+    --gold-300: #E8CE73;
+    --gold-400: #D4AF37;    /* accent */
+    --gold-500: #C9A227;
+    --gold-600: #A6831C;
+
+    /* aliases (legacy support — keep so old pages don't break) */
+    --primary-color: var(--brand-500);
+    --primary-light: var(--brand-400);
+    --primary-dark:  var(--brand-700);
+    --accent-gold:   var(--gold-400);
+
+    /* === SURFACE / BACKGROUND === */
+    --bg-base:     #FAFAF6;     /* warm off-white — page background */
+    --bg-surface:  #FFFFFF;     /* cards, panels */
+    --bg-subtle:   #F4F4EE;     /* secondary surface */
+    --bg-muted:    #EFEFE8;     /* muted regions */
+    --bg-overlay:  rgba(15, 23, 17, 0.4);
+
+    /* === TEXT === */
+    --text-primary:   #18221B;
+    --text-secondary: #5A615C;
+    --text-tertiary:  #8A908D;
+    --text-inverse:   #FFFFFF;
+    --text-link:      var(--brand-600);
+
+    /* legacy aliases */
+    --text-dark:  var(--text-primary);
+    --text-light: var(--text-secondary);
+    --white:      var(--bg-surface);
+    --gray-light: var(--bg-subtle);
+    --gray-medium: #E2E2DA;
+
+    /* === BORDER === */
+    --border-subtle:  rgba(15, 23, 17, 0.06);
+    --border-soft:    rgba(15, 23, 17, 0.1);
+    --border-medium:  rgba(15, 23, 17, 0.15);
+    --border-strong:  rgba(15, 23, 17, 0.25);
+
+    /* === STATE === */
+    --success: #1F8A3A;
+    --success-bg: #E6F6EA;
+    --warning: #B7791F;
+    --warning-bg: #FFF8E5;
+    --danger:  #C7372F;
+    --danger-bg: #FDECEA;
+    --info:    #1565C0;
+    --info-bg: #E3F2FD;
+    --error-color: var(--danger);
+
+    /* === SPACING SCALE (4px base) === */
+    --space-1:  0.25rem;   /* 4 */
+    --space-2:  0.5rem;    /* 8 */
+    --space-3:  0.75rem;   /* 12 */
+    --space-4:  1rem;      /* 16 */
+    --space-5:  1.25rem;   /* 20 */
+    --space-6:  1.5rem;    /* 24 */
+    --space-8:  2rem;      /* 32 */
+    --space-10: 2.5rem;    /* 40 */
+    --space-12: 3rem;      /* 48 */
+    --space-16: 4rem;      /* 64 */
+    --space-20: 5rem;      /* 80 */
+    --space-24: 6rem;      /* 96 */
+
+    /* === RADII === */
+    --radius-xs:  4px;
+    --radius-sm:  8px;
+    --radius-md:  12px;
+    --radius-lg:  16px;
+    --radius-xl:  20px;
+    --radius-2xl: 24px;
+    --radius-3xl: 32px;
+    --radius-full: 9999px;
+
+    /* === SHADOWS (layered, modern) === */
+    --shadow-xs: 0 1px 2px rgba(15, 23, 17, 0.04);
+    --shadow-sm: 0 2px 8px rgba(15, 23, 17, 0.05), 0 1px 2px rgba(15, 23, 17, 0.03);
+    --shadow-md: 0 8px 24px rgba(15, 23, 17, 0.06), 0 2px 6px rgba(15, 23, 17, 0.04);
+    --shadow-lg: 0 16px 40px rgba(15, 23, 17, 0.08), 0 4px 12px rgba(15, 23, 17, 0.04);
+    --shadow-xl: 0 24px 56px rgba(15, 23, 17, 0.12), 0 8px 16px rgba(15, 23, 17, 0.06);
+    --shadow-brand: 0 12px 28px rgba(46, 125, 50, 0.28);
+    --shadow-gold:  0 12px 28px rgba(212, 175, 55, 0.30);
+    /* legacy */
+    --shadow: var(--shadow-md);
+    --shadow-lg-legacy: var(--shadow-lg);
+
+    /* === TYPOGRAPHY === */
+    --font-display: 'Fraunces', 'Playfair Display', Georgia, serif;
+    --font-body:    'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono:    'JetBrains Mono', 'SF Mono', Consolas, monospace;
+
+    --fs-xs:   0.75rem;
+    --fs-sm:   0.875rem;
+    --fs-base: 1rem;
+    --fs-md:   1.125rem;
+    --fs-lg:   1.25rem;
+    --fs-xl:   1.5rem;
+    --fs-2xl:  1.875rem;
+    --fs-3xl:  2.25rem;
+    --fs-4xl:  3rem;
+    --fs-5xl:  3.75rem;
+
+    --leading-tight:   1.15;
+    --leading-snug:    1.35;
+    --leading-normal:  1.55;
+    --leading-relaxed: 1.7;
+
+    --tracking-tight: -0.02em;
+    --tracking-snug:  -0.01em;
+    --tracking-wide:  0.04em;
+    --tracking-wider: 0.08em;
+
+    /* === MOTION === */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --duration-fast: 150ms;
+    --duration-base: 250ms;
+    --duration-slow: 400ms;
+    --duration-slower: 600ms;
+
+    /* legacy */
+    --transition-fast: all 0.15s var(--ease-out);
+    --transition-md:   all 0.25s var(--ease-out);
+    --transition-slow: all 0.4s  var(--ease-out);
+    --transition:      all 0.25s var(--ease-out);
+
+    /* === LAYOUT === */
+    --container-sm: 640px;
+    --container-md: 768px;
+    --container-lg: 1024px;
+    --container-xl: 1200px;
+    --container-2xl: 1400px;
+
+    --header-height: 72px;
+    --header-padding-x: clamp(1rem, 5vw, 3rem);
+
+    /* === Z-INDEX === */
+    --z-base:    1;
+    --z-overlay: 100;
+    --z-sticky:  500;
+    --z-modal:   1000;
+    --z-toast:   2000;
+}

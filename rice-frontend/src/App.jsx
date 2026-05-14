@@ -1,26 +1,26 @@
-// Update your App.js to include the interceptor
-import { StrictMode } from 'react';
+import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
-import router from './Router/routes';
 import axios from 'axios';
+import router from './Router/routes';
 
 function App() {
-  // Add this axios interceptor
-  axios.interceptors.request.use((config) => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      config.headers.Authorization = `Basic ${token}`;
-    }
-    return config;
-  }, (error) => {
-    return Promise.reject(error);
-  });
+  useEffect(() => {
+    const interceptorId = axios.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+          config.headers.Authorization = `Basic ${token}`;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+    return () => {
+      axios.interceptors.request.eject(interceptorId);
+    };
+  }, []);
 
-  return (
-    <StrictMode>
-      <RouterProvider router={router} />
-    </StrictMode>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

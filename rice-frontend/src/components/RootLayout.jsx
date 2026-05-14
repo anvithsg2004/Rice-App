@@ -1,16 +1,23 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom'; // Import Outlet from react-router-dom
+import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom';
 import Header from './Header';
-// import './css/Header.css';
-// import './css/Header.css';
+import Footer from './Footer';
+import './css/RootLayout.css';
+
+const HIDE_FOOTER_ROUTES = ['/login', '/register', '/verify-otp'];
 
 const RootLayout = () => {
+    const location = useLocation();
+    const hideFooter = HIDE_FOOTER_ROUTES.includes(location.pathname);
+
     return (
-        <div>
+        <div className="root-layout">
             <Header />
-            <main>
-                <Outlet /> {/* This will render child routes */}
+            <main className="root-main">
+                <Outlet />
             </main>
+            {!hideFooter && <Footer />}
+            <ScrollRestoration />
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import './css/HomePage.css';
 
@@ -93,177 +93,201 @@ const HomePage = () => {
         },
     ];
 
-    const [newArrivalsScroll, setNewArrivalsScroll] = useState(0);
-    const [highestBoughtScroll, setHighestBoughtScroll] = useState(0);
-    const [isHovered, setIsHovered] = useState(false);
-
-    // Helper function to extract itemId from image path
     const getItemIdFromImage = (imagePath) => {
         const parts = imagePath.split('/');
         const filename = parts[parts.length - 1];
         return filename.split('.')[0];
     };
 
-    useEffect(() => {
-        const newArrivalsContainer = document.querySelector('.new-arrivals-container');
-        const highestBoughtContainer = document.querySelector('.highest-bought-container');
+    const renderCarouselItem = (item, suffix, baseClass) => {
+        const itemId = getItemIdFromImage(item.image);
+        return (
+            <div key={`${item.id}${suffix}`} className={`${baseClass}-item`}>
+                <img src={item.image} alt={item.name} loading="lazy" />
+                <div className={`${baseClass}-item-content`}>
+                    <h3>{item.name}</h3>
+                    <p>{item.description}</p>
+                    <div className="price">{item.price}</div>
+                    <Link to={`/item/${itemId}`}>
+                        <button className="buy-now-button">Buy Now</button>
+                    </Link>
+                </div>
+            </div>
+        );
+    };
 
-        let newArrivalsAnimationId;
-        let highestBoughtAnimationId;
-
-        const scrollNewArrivals = () => {
-            if (newArrivalsContainer && !isHovered) {
-                const scrollAmount = newArrivalsScroll + 0.5;
-                if (scrollAmount >= newArrivalsContainer.scrollWidth / 2) {
-                    setNewArrivalsScroll(0);
-                } else {
-                    setNewArrivalsScroll(scrollAmount);
-                }
-                newArrivalsAnimationId = requestAnimationFrame(scrollNewArrivals);
-            }
-        };
-
-        const scrollHighestBought = () => {
-            if (highestBoughtContainer && !isHovered) {
-                const scrollAmount = highestBoughtScroll + 0.5;
-                if (scrollAmount >= highestBoughtContainer.scrollWidth / 2) {
-                    setHighestBoughtScroll(0);
-                } else {
-                    setHighestBoughtScroll(scrollAmount);
-                }
-                highestBoughtAnimationId = requestAnimationFrame(scrollHighestBought);
-            }
-        };
-
-        newArrivalsAnimationId = requestAnimationFrame(scrollNewArrivals);
-        highestBoughtAnimationId = requestAnimationFrame(scrollHighestBought);
-
-        return () => {
-            cancelAnimationFrame(newArrivalsAnimationId);
-            cancelAnimationFrame(highestBoughtAnimationId);
-        };
-    }, [newArrivalsScroll, highestBoughtScroll, isHovered]);
+    const features = [
+        {
+            icon: '🌾',
+            title: 'Premium Selection',
+            text: 'Hand-picked rice varieties sourced from the world\'s finest growing regions.',
+        },
+        {
+            icon: '🚚',
+            title: 'Free Delivery',
+            text: 'Complimentary shipping on every order above ₹1,000 — straight to your door.',
+        },
+        {
+            icon: '🌱',
+            title: 'Sustainably Sourced',
+            text: 'Partnering with family farms that practice responsible cultivation.',
+        },
+        {
+            icon: '✨',
+            title: 'Quality Guaranteed',
+            text: 'Every grain tested for purity and freshness before it reaches your kitchen.',
+        },
+    ];
 
     return (
         <div className="home-page">
-            <h1>Welcome to Rice and Glory</h1>
-            <p>Your premier destination for premium rice varieties from around the world</p>
-
-            {/* New "Know About Rice" Section */}
-            <div className="know-about-rice">
-                <h2 className="section-title">Know About Rice</h2>
-                <p style={{ textAlign: 'center', margin: '1.5rem 0' }}>
-                    Discover the fascinating world of rice - its history, benefits, and cultivation process
-                </p>
-                <div className="about-rice-preview">
-                    <img
-                        src="\images\pexels-photo-2589457.jpeg"
-                        alt="Rice Field"
-                        loading="lazy"
-                    />
-                    <div className="preview-content">
-                        <h3>The Story of Rice</h3>
-                        <p>Rice is the most important staple food for over half of humanity. Discover why it's considered a superfood and its incredible journey from farm to table.</p>
-                        <Link to="/about-rice" className="learn-more-button">
-                            Learn More
+            <section className="hero-section">
+                <div className="hero-content">
+                    <span className="hero-eyebrow">Premium Rice · Sourced Worldwide</span>
+                    <h1 className="hero-title">
+                        The world's finest rice, <em>delivered</em>.
+                    </h1>
+                    <p className="hero-subtitle">
+                        From aromatic Basmati to heritage Black rice — discover varieties grown
+                        with care across continents, curated for kitchens that care about every grain.
+                    </p>
+                    <div className="hero-actions">
+                        <Link to="/categories" className="hero-button primary">
+                            Shop the Collection
+                        </Link>
+                        <Link to="/about-rice" className="hero-button ghost">
+                            Our Story
                         </Link>
                     </div>
                 </div>
-            </div>
+                <div className="hero-decoration" aria-hidden="true" />
+            </section>
 
-            <div className="new-arrivals">
-                <h2 className="section-title">New Arrivals</h2>
-                <div
-                    className="new-arrivals-container"
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                >
-                    <div
-                        className="new-arrivals-slider"
-                        style={{ transform: `translateX(-${newArrivalsScroll}px)` }}
-                    >
-                        {newArrivals.map(item => {
-                            const itemId = getItemIdFromImage(item.image);
-                            return (
-                                <div key={item.id} className="new-arrivals-item">
-                                    <img src={item.image} alt={item.name} />
-                                    <div className="new-arrivals-item-content">
-                                        <h3>{item.name}</h3>
-                                        <p>{item.description}</p>
-                                        <div className="price">{item.price}</div>
-                                        <Link to={`/item/${itemId}`}>
-                                            <button className="buy-now-button">Buy Now</button>
-                                        </Link>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                        {newArrivals.map(item => {
-                            const itemId = getItemIdFromImage(item.image);
-                            return (
-                                <div key={`${item.id}-duplicate`} className="new-arrivals-item">
-                                    <img src={item.image} alt={item.name} />
-                                    <div className="new-arrivals-item-content">
-                                        <h3>{item.name}</h3>
-                                        <p>{item.description}</p>
-                                        <div className="price">{item.price}</div>
-                                        <Link to={`/item/${itemId}`}>
-                                            <button className="buy-now-button">Buy Now</button>
-                                        </Link>
-                                    </div>
-                                </div>
-                            );
-                        })}
+            <section className="features-grid-section">
+                <div className="features-grid">
+                    {features.map((f, i) => (
+                        <div key={i} className="feature-card">
+                            <div className="feature-icon" aria-hidden="true">{f.icon}</div>
+                            <h3>{f.title}</h3>
+                            <p>{f.text}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            <section className="know-about-rice">
+                <div className="section-header">
+                    <span className="section-eyebrow">Discover</span>
+                    <h2 className="section-title">The story of rice</h2>
+                    <p className="section-intro">
+                        From paddy to plate — discover the heritage, varieties, and cultivation
+                        process behind the world's most essential grain.
+                    </p>
+                </div>
+                <div className="about-rice-preview">
+                    <img
+                        src="/images/pexels-photo-2589457.jpeg"
+                        alt="Rice paddy field at golden hour"
+                        loading="lazy"
+                    />
+                    <div className="preview-content">
+                        <h3>A grain with a 10,000-year story</h3>
+                        <p>
+                            Rice has nourished civilizations for millennia. Each variety carries
+                            the soul of its land — from the misty terraces of Asia to the sun-soaked
+                            deltas of the Americas. We bring you that heritage, intact.
+                        </p>
+                        <Link to="/about-rice" className="learn-more-button">
+                            Read more
+                        </Link>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div className="highest-bought">
-                <h2 className="section-title">Highest Bought</h2>
-                <div
-                    className="highest-bought-container"
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                >
-                    <div
-                        className="highest-bought-slider"
-                        style={{ transform: `translateX(-${highestBoughtScroll}px)` }}
-                    >
-                        {highestBought.map(item => {
-                            const itemId = getItemIdFromImage(item.image);
-                            return (
-                                <div key={item.id} className="highest-bought-item">
-                                    <img src={item.image} alt={item.name} />
-                                    <div className="highest-bought-item-content">
-                                        <h3>{item.name}</h3>
-                                        <p>{item.description}</p>
-                                        <div className="price">{item.price}</div>
-                                        <Link to={`/item/${itemId}`}>
-                                            <button className="buy-now-button">Buy Now</button>
-                                        </Link>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                        {highestBought.map(item => {
-                            const itemId = getItemIdFromImage(item.image);
-                            return (
-                                <div key={`${item.id}-duplicate`} className="highest-bought-item">
-                                    <img src={item.image} alt={item.name} />
-                                    <div className="highest-bought-item-content">
-                                        <h3>{item.name}</h3>
-                                        <p>{item.description}</p>
-                                        <div className="price">{item.price}</div>
-                                        <Link to={`/item/${itemId}`}>
-                                            <button className="buy-now-button">Buy Now</button>
-                                        </Link>
-                                    </div>
-                                </div>
-                            );
-                        })}
+            <section className="new-arrivals">
+                <div className="section-header">
+                    <span className="section-eyebrow">Fresh in</span>
+                    <h2 className="section-title">New arrivals</h2>
+                    <p className="section-intro">
+                        The latest additions to our shelves — discovered, vetted, and ready to ship.
+                    </p>
+                </div>
+                <div className="new-arrivals-container">
+                    <div className="new-arrivals-slider marquee-track">
+                        {newArrivals.map(item => renderCarouselItem(item, '', 'new-arrivals'))}
+                        {newArrivals.map(item => renderCarouselItem(item, '-dup', 'new-arrivals'))}
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <section className="highest-bought">
+                <div className="section-header">
+                    <span className="section-eyebrow">Bestsellers</span>
+                    <h2 className="section-title">Customer favourites</h2>
+                    <p className="section-intro">
+                        The rice our community returns to, again and again.
+                    </p>
+                </div>
+                <div className="highest-bought-container">
+                    <div className="highest-bought-slider marquee-track marquee-track-reverse">
+                        {highestBought.map(item => renderCarouselItem(item, '', 'highest-bought'))}
+                        {highestBought.map(item => renderCarouselItem(item, '-dup', 'highest-bought'))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="testimonials-section">
+                <div className="section-header">
+                    <span className="section-eyebrow">Loved by cooks</span>
+                    <h2 className="section-title">Words from our kitchen community</h2>
+                </div>
+                <div className="testimonials-grid">
+                    {[
+                        {
+                            quote: 'The aged Basmati genuinely transformed my biryani. Long, fluffy grains and that aroma — exactly like my grandmother\'s.',
+                            author: 'Priya Menon',
+                            role: 'Home cook · Bengaluru',
+                            stars: 5,
+                        },
+                        {
+                            quote: 'I run a small Italian restaurant and switched all my risotto rice to their Superfino Arborio. The creaminess is unmatched.',
+                            author: 'Marco Rossi',
+                            role: 'Chef · Mumbai',
+                            stars: 5,
+                        },
+                        {
+                            quote: 'Shipping was fast and the packaging is beautiful. The Black Glutinous rice is now my Sunday dessert staple.',
+                            author: 'Aisha Khan',
+                            role: 'Food blogger · Delhi',
+                            stars: 5,
+                        },
+                    ].map((t, i) => (
+                        <figure key={i} className="testimonial-card">
+                            <div className="testimonial-stars" aria-label={`${t.stars} out of 5 stars`}>
+                                {Array.from({ length: t.stars }).map((_, j) => (
+                                    <span key={j} aria-hidden="true">★</span>
+                                ))}
+                            </div>
+                            <blockquote>
+                                <p>"{t.quote}"</p>
+                            </blockquote>
+                            <figcaption>
+                                <span className="testimonial-author">{t.author}</span>
+                                <span className="testimonial-role">{t.role}</span>
+                            </figcaption>
+                        </figure>
+                    ))}
+                </div>
+            </section>
+
+            <section className="cta-section">
+                <div className="cta-card">
+                    <span className="section-eyebrow">Get started</span>
+                    <h2>Ready to taste the difference?</h2>
+                    <p>Browse the full collection and find the rice your kitchen has been waiting for.</p>
+                    <Link to="/categories" className="cta-button">Explore the catalogue</Link>
+                </div>
+            </section>
         </div>
     );
 };

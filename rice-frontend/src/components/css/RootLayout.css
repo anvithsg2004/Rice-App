@@ -1,9 +1,13 @@
+@import './tokens.css';
+
 .root-layout {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background: var(--bg-base);
 }
 
-main {
+.root-main {
     flex: 1;
+    width: 100%;
 }
